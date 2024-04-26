@@ -1,9 +1,9 @@
 pub mod slack;
 
-pub struct TestReport {
-    pub test_results: Vec<TestResult>,
+pub struct JunitTestReport {
+    pub test_results: Vec<JunitTestResult>,
 }
-pub struct TestResult {
+pub struct JunitTestResult {
     pub suite: String,
     pub name: String,
     pub status: TestStatus,
@@ -17,11 +17,11 @@ pub enum TestStatus {
     Skipped,
 }
 
-pub trait MarkdownMessage {
+pub trait MarkdownTestResult {
     fn to_string(&self) -> String;
 }
 
-impl MarkdownMessage for TestResult {
+impl MarkdownTestResult for JunitTestResult {
     fn to_string(&self) -> String {
         match self.status {
             TestStatus::Passed => format!("✅ {}", self.name),
