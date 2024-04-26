@@ -29,7 +29,7 @@ impl MarkdownTestResult for JunitTestResult {
                 format!("✅ _{}_ *passed* (`{}s`)", self.name, self.execution_time)
             }
             TestStatus::Failed => format!(
-                "❌ _{}_ *failed* with reason (`{}s`): ```{}```",
+                "❌ _{}_ *failed* (`{}s`): ```{}```",
                 self.name,
                 self.execution_time,
                 self.failure.clone().expect("missing failure message")
