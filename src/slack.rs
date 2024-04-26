@@ -4,6 +4,7 @@ use crate::{JunitTestReport, MarkdownTestResult, TestStatus};
 
 #[derive(Serialize)]
 pub struct SlackReport {
+    #[serde(skip)]
     pub title: String,
     pub blocks: Vec<Block>,
 }

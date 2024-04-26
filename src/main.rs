@@ -1,6 +1,6 @@
 use anyhow::Result;
 use glob::glob;
-use junit_to_slack_reporter::{slack::SlackReport, JunitTestReport, JunitTestResult, TestStatus};
+use reportly::{slack::SlackReport, JunitTestReport, JunitTestResult, TestStatus};
 use roxmltree::Document;
 use std::{fs, path::Path};
 

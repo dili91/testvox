@@ -1,8 +1,8 @@
-alias b := docker-build
-alias r := docker-run
+alias db := docker-build
+alias dr := docker-run
 
 docker-build:
-    docker build . -t reporter
+    docker build . -t reportly
 
 docker-run:
-    @docker run --name reporter --rm -v "$HOME/Documents/TrueLayer/Projects/truelayer-java/build/test-results:/junit-reports" reporter
+    @docker run --rm -v "$HOME/Documents/TrueLayer/Projects/truelayer-java/build/test-results:/junit-reports" reportly
