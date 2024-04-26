@@ -46,7 +46,7 @@ impl From<JunitTestReport> for SlackReport {
         let mut section_blocks: Vec<Block> = report
             .test_results
             .into_iter()
-            .filter(|t| t.status != TestStatus::Passed)
+            //.filter(|t| t.status != TestStatus::Passed) TODO: control this via params
             .map(|t| {
                 vec![
                     Block::Divider,

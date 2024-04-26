@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Payments integration tests" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-04-25T14:00:14" hostname="FVFGQ5Y0Q05P" time="0.017">
+  <properties/>
+  <testcase name="It should create a payment with additional product intention" classname="com.truelayer.java.integration.PaymentsIntegrationTests" time="0.017"/>
+</testsuite>

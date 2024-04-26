@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Payments integration tests" tests="1" skipped="1" failures="0" errors="0" timestamp="2024-04-25T14:00:14" hostname="FVFGQ5Y0Q05P" time="0.0">
+  <properties/>
+  <testcase name="It should start an authorization flow with custom headers" classname="com.truelayer.java.integration.PaymentsIntegrationTests" time="0.0">
+    <skipped/>
+  </testcase>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
