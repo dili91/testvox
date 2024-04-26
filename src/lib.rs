@@ -6,6 +6,7 @@ pub struct JunitTestReport {
 pub struct JunitTestResult {
     pub suite: String,
     pub name: String,
+    pub execution_time: f32,
     pub status: TestStatus,
     pub failure: Option<String>,
 }
@@ -24,10 +25,13 @@ pub trait MarkdownTestResult {
 impl MarkdownTestResult for JunitTestResult {
     fn to_string(&self) -> String {
         match self.status {
-            TestStatus::Passed => format!("✅ {}", self.name),
+            TestStatus::Passed => {
+                format!("✅ _{}_ *passed* (`{}s`)", self.name, self.execution_time)
+            }
             TestStatus::Failed => format!(
-                "❌ _{}_ *failed* with reason: ```{}```",
+                "❌ _{}_ *failed* with reason (`{}s`): ```{}```",
                 self.name,
+                self.execution_time,
                 self.failure.clone().expect("missing failure message")
             ),
             TestStatus::Skipped => format!("⏭️ _{}_ was *skipped*", self.name),

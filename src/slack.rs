@@ -1,6 +1,6 @@
 use serde::Serialize;
 
-use crate::{JunitTestReport, MarkdownTestResult, TestStatus};
+use crate::{JunitTestReport, MarkdownTestResult};
 
 #[derive(Serialize)]
 pub struct SlackReport {

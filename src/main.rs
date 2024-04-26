@@ -1,9 +1,10 @@
 use anyhow::Result;
 use glob::glob;
 use reportly::{slack::SlackReport, JunitTestReport, JunitTestResult, TestStatus};
-use roxmltree::Document;
+use roxmltree::{Document, Node};
 use std::{fs, path::Path};
 
+//TODO: remove code that panics
 fn main() {
     let slack_report: SlackReport = build_report("/junit-reports/**/*.xml")
         .expect("Unable to create test report")
@@ -37,40 +38,46 @@ fn parse_test_file(test_file: &Path) -> Result<Vec<JunitTestResult>> {
 
     let mut test_results: Vec<JunitTestResult> = vec![];
 
-    let test_suite = doc
+    let test_suites: Vec<Node> = doc
         .descendants()
-        .find(|n| n.has_tag_name("testsuite"))
-        .unwrap();
+        .filter(|n| n.has_tag_name("testsuite"))
+        .collect();
 
-    test_suite
-        .children()
-        .filter(|n| n.has_tag_name("testcase"))
-        .for_each(|n| {
-            let test_name = n.attribute("name").unwrap();
+    for test_suite in test_suites {
+        test_suite
+            .children()
+            .filter(|n| n.has_tag_name("testcase"))
+            .for_each(|n| {
+                let test_name = n.attribute("name").unwrap();
 
-            if let Some(failure) = n.children().find(|n| n.has_tag_name("failure")) {
-                test_results.push(JunitTestResult {
-                    suite: test_suite.attribute("name").unwrap().to_string(),
-                    name: test_name.to_string(),
-                    status: TestStatus::Failed,
-                    failure: Some(failure.attribute("message").unwrap().to_string()),
-                })
-            } else if n.children().any(|n| n.has_tag_name("skipped")) {
-                test_results.push(JunitTestResult {
-                    suite: test_suite.attribute("name").unwrap().to_string(),
-                    name: test_name.to_string(),
-                    status: TestStatus::Skipped,
-                    failure: None,
-                })
-            } else {
-                test_results.push(JunitTestResult {
-                    suite: test_suite.attribute("name").unwrap().to_string(),
-                    name: test_name.to_string(),
-                    status: TestStatus::Passed,
-                    failure: None,
-                })
-            };
-        });
+                // TODO: make below more compact
+                if let Some(failure) = n.children().find(|n| n.has_tag_name("failure")) {
+                    test_results.push(JunitTestResult {
+                        suite: test_suite.attribute("name").unwrap().to_string(),
+                        name: test_name.to_string(),
+                        execution_time: n.attribute("time").unwrap().parse().unwrap(),
+                        status: TestStatus::Failed,
+                        failure: Some(failure.attribute("message").unwrap().to_string()),
+                    })
+                } else if n.children().any(|n| n.has_tag_name("skipped")) {
+                    test_results.push(JunitTestResult {
+                        suite: test_suite.attribute("name").unwrap().to_string(),
+                        execution_time: n.attribute("time").unwrap().parse().unwrap(),
+                        name: test_name.to_string(),
+                        status: TestStatus::Skipped,
+                        failure: None,
+                    })
+                } else {
+                    test_results.push(JunitTestResult {
+                        suite: test_suite.attribute("name").unwrap().to_string(),
+                        name: test_name.to_string(),
+                        execution_time: n.attribute("time").unwrap().parse().unwrap(),
+                        status: TestStatus::Passed,
+                        failure: None,
+                    })
+                };
+            });
+    }
 
     Ok(test_results)
 }
