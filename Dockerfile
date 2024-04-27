@@ -1,7 +1,7 @@
 FROM rust:1.77.2-slim-bookworm
 
-WORKDIR /usr/src/reportly
-RUN mkdir /junit-reports
+WORKDIR /home/reportly
+RUN mkdir test-reports
 
 COPY . .
 
