@@ -1,6 +1,6 @@
 use anyhow::Result;
 use glob::glob;
-use reportly::{readers::junit::parse_test_file, slack::SlackReport, TestReport};
+use reportly::{readers::junit::parse_test_file, writers::slack::SlackReport, TestReport};
 
 //TODO: remove code that panics
 fn main() {

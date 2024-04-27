@@ -1,6 +1,6 @@
 use std::ffi::OsString;
 pub mod readers;
-pub mod slack;
+pub mod writers;
 
 pub struct TestReport {
     pub file_name: OsString,
