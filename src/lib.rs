@@ -1,11 +1,14 @@
+use std::ffi::OsString;
+pub mod readers;
 pub mod slack;
 
-pub struct JunitTestReport {
-    pub test_results: Vec<JunitTestResult>,
+pub struct TestReport {
+    pub file_name: OsString,
+    pub results: Vec<TestResult>,
 }
-pub struct JunitTestResult {
-    pub suite: String,
+pub struct TestResult {
     pub name: String,
+    pub suite_name: Option<String>,
     pub execution_time: f32,
     pub status: TestStatus,
     pub failure: Option<String>,
@@ -22,7 +25,7 @@ pub trait MarkdownTestResult {
     fn to_string(&self) -> String;
 }
 
-impl MarkdownTestResult for JunitTestResult {
+impl MarkdownTestResult for TestResult {
     fn to_string(&self) -> String {
         match self.status {
             TestStatus::Passed => {

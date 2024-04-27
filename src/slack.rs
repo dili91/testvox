@@ -1,6 +1,6 @@
 use serde::Serialize;
 
-use crate::{JunitTestReport, MarkdownTestResult};
+use crate::{MarkdownTestResult, TestReport};
 
 #[derive(Serialize)]
 pub struct SlackReport {
@@ -32,8 +32,8 @@ pub struct MarkdownText {
 
 // TODO: this trait should return a builder instead. title should be a property of the builder,
 // as well as flags to understand what statuses to display
-impl From<JunitTestReport> for SlackReport {
-    fn from(report: JunitTestReport) -> Self {
+impl From<Vec<TestReport>> for SlackReport {
+    fn from(reports: Vec<TestReport>) -> Self {
         let header_block = Block::Header {
             text: PlainText {
                 text:
@@ -43,9 +43,10 @@ impl From<JunitTestReport> for SlackReport {
             },
         };
 
-        let mut section_blocks: Vec<Block> = report
-            .test_results
+        let mut section_blocks: Vec<Block> = reports
             .into_iter()
+            .map(|r| r.results)
+            .flatten()
             //.filter(|t| t.status != TestStatus::Passed) TODO: control this via params
             .map(|t| {
                 vec![
