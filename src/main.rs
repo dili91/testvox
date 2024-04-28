@@ -1,6 +1,10 @@
 use anyhow::Result;
 use glob::glob;
-use reportly::{readers::junit::parse_test_file, writers::slack::SlackReport, TestReport};
+use reportly::{
+    parsers::{junit::JunitTestParser, parsers::TestParser},
+    reporters::slack::SlackReport,
+    TestReport,
+};
 
 //TODO: remove code that panics
 fn main() {
@@ -20,7 +24,10 @@ fn build_reports(junit_reports_file_pattern: &str) -> Result<Vec<TestReport>> {
     for test_file in glob(junit_reports_file_pattern)? {
         match test_file {
             Ok(path) => {
-                let report: TestReport = parse_test_file(path.as_path())?;
+                let junit_parser = JunitTestParser {
+                    file_name: path.to_str().unwrap().to_string(),
+                };
+                let report: TestReport = junit_parser.parse()?;
                 reports.push(report)
             }
             Err(e) => println!("{:?}", e),

@@ -1,9 +1,8 @@
-use std::ffi::OsString;
-pub mod readers;
-pub mod writers;
+pub mod parsers;
+pub mod reporters;
 
 pub struct TestReport {
-    pub file_name: OsString,
+    pub file_name: String,
     pub results: Vec<TestResult>,
 }
 pub struct TestResult {
