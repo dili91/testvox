@@ -40,3 +40,22 @@ impl MarkdownTestResult for TestResult {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::{MarkdownTestResult, TestResult};
+
+    #[test]
+    fn should_convert_to_markdown_test_message() {
+        let test_result = TestResult{ 
+            name: "A test name".to_string(), 
+            suite_name: Some("A test suite".to_string()), 
+            execution_time: 2.4, 
+            status: crate::TestStatus::Passed, 
+            failure: None };
+
+        let markdown_message = test_result.to_string();
+
+        assert_eq!(markdown_message,"✅ _A test name_ *passed* (`2.4s`)");
+    }
+}
