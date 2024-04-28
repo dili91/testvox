@@ -65,3 +65,11 @@ impl TestParser for JunitTestParser {
         })
     }
 }
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn should_parse_junit_test_report() {
+        todo!()
+    }
+}

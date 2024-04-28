@@ -72,3 +72,11 @@ impl From<Vec<TestReport>> for SlackReport {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn should_create_report_in_slack_format() {
+        todo!()
+    }
+}
