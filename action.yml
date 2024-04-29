@@ -4,7 +4,7 @@ inputs:
   test-results-dir:
     description: 'Directory that contains raw test results'
     required: true
-    default: '${GITHUB_WORKSPACE}/test-reports/**/*.xml'
+    default: './reportly/test-reports/**/*.xml'
 outputs:
   report:
     description: 'A useful report'
