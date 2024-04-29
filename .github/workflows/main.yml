@@ -14,5 +14,5 @@ jobs:
       - name: Get the output
         run: |
           cat << EOF
-          $steps.reportly.outputs.report
+          ${{steps.reportly.outputs.report}}
           EOF
