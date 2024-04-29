@@ -2,4 +2,4 @@
 # This entrypoint is only use by Github actions 
 
 report=$(reportly $1)
-echo "report=$report" >> $GITHUB_OUTPUT
+echo "REPORT<<EOF"$'\n'"$report"$'\n'EOF >> "$GITHUB_OUTPUT"
