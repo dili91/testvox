@@ -1,0 +1,20 @@
+on: [push]
+
+jobs:
+  test_junit_reports:
+    name: Test reports generation from Junit results
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./ # Uses an action in the root directory
+        name: Create Slack report from Junit results
+        id: generate_slack_report
+        with:
+          test_results_pattern: "./test-reports/**/*.xml"
+      - name: Send default test report
+        uses: slackapi/slack-github-action@v1.26.0
+        with:
+          payload: ${{steps.generate_slack_report.outputs.report}}
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
