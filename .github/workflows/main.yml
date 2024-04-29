@@ -10,6 +10,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - uses: ./ # Uses an action in the root directory
-        id: reportly
+        id: generate_report
       - name: Get the output
-        run: cat $steps.reportly.outputs.report
+        run: echo "The generated report is: ${{ steps.generate_report.outputs.report }}"
