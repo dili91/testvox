@@ -1,7 +1,7 @@
 FROM rust:1.77.2-slim-bookworm
 
-COPY . /usr/src/reportly
+COPY . /reportly
 
-RUN cargo install --path /usr/src/reportly
+RUN cargo install --path /reportly
 
 CMD ["reportly"]
