@@ -1,0 +1,15 @@
+name: 'Reportly'
+description: 'Turn test results into useful reports'
+inputs:
+  test-results-dir:
+    description: 'Directory that contains raw test results'
+    required: true
+    default: './test-reports'
+outputs:
+  report:
+    description: 'A useful report'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.test-results-dir }}
