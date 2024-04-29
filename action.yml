@@ -4,7 +4,7 @@ inputs:
   test_results_pattern:
     description: 'Directory that contains raw test results'
     required: true
-    default: "/reportly/test-reports/**/*.xml"
+    default: "./test-reports/**/*.xml"
 outputs:
   report:
     description: 'A useful report'
@@ -13,4 +13,4 @@ runs:
   image: 'Dockerfile'
   entrypoint: /reportly/entrypoint.sh
   args:
-    - ${{ inputs.test_results_pattern }}
+    - "/reportly/${{ inputs.test_results_pattern }}"
