@@ -19,7 +19,7 @@ jobs:
       - uses: ./ # Uses an action in the root directory
         id: generate_report_custom_test_results_pattern
         with:
-          test_results_pattern: "/reportly/test-reports/acceptance-tests/*.xml"
+          test_results_pattern: "/reportly/test-reports/unit-tests/*.xml"
       - name: Send integration test report
         uses: slackapi/slack-github-action@v1.26.0
         with:
