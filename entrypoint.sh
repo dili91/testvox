@@ -1,5 +1,6 @@
 #!/bin/sh
 # This entrypoint is only use by Github actions 
 
-report=$(reportly $1)
-echo "REPORT<<EOF"$'\n'"$report"$'\n'EOF >> "$GITHUB_OUTPUT"
+echo 'REPORT<<EOF' >> $GITHUB_OUTPUT
+reportly $1 >> $GITHUB_OUTPUT
+echo 'EOF' >> $GITHUB_OUTPUT
