@@ -4,7 +4,7 @@ inputs:
   test-results-dir:
     description: 'Directory that contains raw test results'
     required: true
-    default: '/home/runner/work/reportly/reportly/test-reports/**/*.xml'
+    default: '/github/workspace/test-reports/**/*.xml'
 outputs:
   report:
     description: 'A useful report'
