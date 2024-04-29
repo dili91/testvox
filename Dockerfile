@@ -4,4 +4,4 @@ COPY . /reportly
 
 RUN cargo install --path /reportly
 
-CMD ["reportly"]
+ENTRYPOINT ["reportly"]

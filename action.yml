@@ -11,6 +11,6 @@ outputs:
 runs:
   using: 'docker'
   image: 'Dockerfile'
+  entrypoint: /reportly/entrypoint.sh
   args:
-    - reportly
     - ${{ inputs.test-results-dir }}

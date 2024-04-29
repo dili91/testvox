@@ -10,7 +10,7 @@ docker-build:
     docker build . -t reportly
 
 docker-run:
-    docker run --rm reportly reportly "/reportly/{{default_test_reports_pattern}}"
+    docker run --rm reportly "/reportly/{{default_test_reports_pattern}}"
 
 build:
     cargo build
