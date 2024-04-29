@@ -12,5 +12,4 @@ jobs:
       - uses: ./ # Uses an action in the root directory
         id: reportly
       - name: Get the output
-        run: |
-          cat ${{steps.reportly.outputs.report}}
+        run: cat $steps.reportly.outputs.report
