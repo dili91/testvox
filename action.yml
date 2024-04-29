@@ -4,13 +4,12 @@ inputs:
   test-results-dir:
     description: 'Directory that contains raw test results'
     required: true
-    default: './test-reports/**/*.xml'
+    default: '/usr/src/reportly/test-reports/**/*.xml'
 outputs:
   report:
     description: 'A useful report'
 runs:
   using: 'docker'
   image: 'Dockerfile'
-  working-directory: '/home/reportly'
   args:
     - ${{ inputs.test-results-dir }}
