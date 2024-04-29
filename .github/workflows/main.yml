@@ -7,13 +7,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - uses: ./ # Uses an action in the root directory
-        id: generate_report
-      - name: Send custom JSON data to Slack workflow
+        id: generate_report_default
+      - uses: ./ # Uses an action in the root directory
+        id: generate_report_integration
+      - name: Send default test report
         uses: slackapi/slack-github-action@v1.26.0
         with:
-          # For posting a rich message using Block Kit
-          payload: |
-            ${{steps.generate_report.outputs.report}}
+          payload: ${{steps.generate_report_default.outputs.report}}
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+      - name: Send integration test report
+        uses: slackapi/slack-github-action@v1.26.0
+        with:
+          payload: ${{steps.generate_report_integration.outputs.report}}
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK

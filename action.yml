@@ -1,7 +1,7 @@
 name: 'Reportly'
 description: 'Turn test results into useful reports'
 inputs:
-  test-results-dir:
+  test_results_pattern:
     description: 'Directory that contains raw test results'
     required: true
     default: '/reportly/test-reports/**/*.xml'
@@ -13,4 +13,4 @@ runs:
   image: 'Dockerfile'
   entrypoint: /reportly/entrypoint.sh
   args:
-    - ${{ inputs.test-results-dir }}
+    - ${{ inputs.test_results_pattern }}
