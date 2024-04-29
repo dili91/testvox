@@ -1,0 +1,15 @@
+on: [push]
+
+jobs:
+  hello_world_job:
+    runs-on: ubuntu-latest
+    name: A test
+    steps:
+      # To use this repository's private action,
+      # you must check out the repository
+      - name: Checkout
+        uses: actions/checkout@v4
+      - uses: ./ # Uses an action in the root directory
+        id: reportly
+      - name: Get the output
+        run: echo "report:\n ${{ steps.reportly.outputs.report }}"
