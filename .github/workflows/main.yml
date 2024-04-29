@@ -8,8 +8,6 @@ jobs:
         uses: actions/checkout@v4
       - uses: ./ # Uses an action in the root directory
         id: generate_report_default
-      - uses: ./ # Uses an action in the root directory
-        id: generate_report_integration
       - name: Send default test report
         uses: slackapi/slack-github-action@v1.26.0
         with:
@@ -17,10 +15,17 @@ jobs:
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+
+      - uses: ./ # Uses an action in the root directory
+        id: generate_report_integration_tests
+        with:
+          test_results_patternt: '/reportly/test-reports/integration-tests/*.xml'
       - name: Send integration test report
         uses: slackapi/slack-github-action@v1.26.0
         with:
-          payload: ${{steps.generate_report_integration.outputs.report}}
+          payload: ${{steps.generate_report_integration_tests.outputs.report}}
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+      
+      
