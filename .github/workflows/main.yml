@@ -17,13 +17,13 @@ jobs:
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
 
       - uses: ./ # Uses an action in the root directory
-        id: generate_report_integration_tests
+        id: generate_report_custom_test_results_pattern
         with:
-          test_results_pattern: '/reportly/test-reports/integration-tests/*.xml'
+          test_results_pattern: "/reportly/test-reports/acceptance-tests/*.xml"
       - name: Send integration test report
         uses: slackapi/slack-github-action@v1.26.0
         with:
-          payload: ${{steps.generate_report_integration_tests.outputs.report}}
+          payload: ${{steps.generate_report_custom_test_results_pattern.outputs.report}}
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
