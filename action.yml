@@ -2,10 +2,10 @@ name: 'Reportly'
 description: 'Turn test results into useful reports'
 inputs:
   report_title:
-    descritpion: 'The report title'
+    description: 'The report title'
     required: true
     default: "My simple test report"
-  test_results_pattern:
+  test_reports_pattern:
     description: 'Directory that contains raw test results'
     required: true
     default: "./test-reports/**/*.xml"
@@ -18,4 +18,4 @@ runs:
   entrypoint: /reportly/entrypoint.sh
   args:
     - ${{ inputs.report_title }}
-    - "/reportly/${{ inputs.test_results_pattern }}"
+    - "/reportly/${{ inputs.test_reports_pattern }}"
