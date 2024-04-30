@@ -17,5 +17,5 @@ runs:
   image: 'Dockerfile'
   entrypoint: /reportly/entrypoint.sh
   args:
-    - ${{ inputs.report_title }}
+    - "${{ inputs.report_title }}"
     - "/reportly/${{ inputs.test_reports_pattern }}"
