@@ -1,4 +1,4 @@
-use crate::{TestReport, TestResult, TestStatus};
+use crate::{TestResult, TestStatus};
 use anyhow::Result;
 use roxmltree::{Document, Node};
 use std::fs;
@@ -10,7 +10,7 @@ pub struct JunitTestParser {
 }
 
 impl TestParser for JunitTestParser {
-    fn parse(&self) -> Result<TestReport> {
+    fn parse(&self) -> Result<Vec<TestResult>> {
         let junit_report = fs::read_to_string(&self.file_name)?;
 
         let doc = Document::parse(junit_report.as_str())?;
@@ -59,10 +59,7 @@ impl TestParser for JunitTestParser {
                 });
         }
 
-        Ok(TestReport {
-            file_name: self.file_name.clone(),
-            results: test_results,
-        })
+        Ok(test_results)
     }
 }
 

@@ -8,6 +8,7 @@ authors = ["Andrea Di Lisio <andrea.dilisio91@gmail.com>"]
 
 [dependencies]
 anyhow = "1.0.82"
+clap = { version = "4.5.4", features = ["derive"] }
 glob = "0.3.1"
 roxmltree = "0.19.0"
 serde = { version = "1.0", features = ["derive"] }

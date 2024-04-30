@@ -1,12 +1,16 @@
 use serde::Serialize;
 
-use crate::{MarkdownTestResult, TestReport};
+use crate::{MarkdownTestResult, TestResult};
 
 #[derive(Serialize)]
 pub struct SlackReport {
-    #[serde(skip)]
-    pub title: String,
     pub blocks: Vec<Block>,
+}
+
+impl SlackReport {
+    pub fn builder() -> SlackReportBuilder {
+        SlackReportBuilder::default()
+    }
 }
 
 #[derive(Serialize)]
@@ -30,23 +34,41 @@ pub struct MarkdownText {
     pub text: String,
 }
 
-// TODO: this trait should return a builder instead. title should be a property of the builder,
-// as well as flags to understand what statuses to display
-impl From<Vec<TestReport>> for SlackReport {
-    fn from(reports: Vec<TestReport>) -> Self {
+#[derive(Default)]
+pub struct SlackReportBuilder {
+    title: String,
+    test_results: Vec<TestResult>,
+}
+
+impl SlackReportBuilder {
+    pub fn new() -> SlackReportBuilder {
+        SlackReportBuilder {
+            title: String::from("Test report"),
+            test_results: vec![],
+        }
+    }
+
+    pub fn with_title(mut self, title: String) -> SlackReportBuilder {
+        self.title = title;
+        self
+    }
+
+    pub fn with_test_blocks(mut self, test_blocks: Vec<TestResult>) -> SlackReportBuilder {
+        self.test_results = test_blocks;
+        self
+    }
+
+    pub fn build(self) -> SlackReport {
         let header_block = Block::Header {
             text: PlainText {
-                text:
-                    ":java::fire: Acceptance tests are failing in Sandbox on the Java backend library!"
-                        .to_string(),
+                text: self.title,
                 emoji: true,
             },
         };
 
-        let mut section_blocks: Vec<Block> = reports
+        let mut section_blocks: Vec<Block> = self
+            .test_results
             .into_iter()
-            .map(|r| r.results)
-            .flatten()
             //.filter(|t| t.status != TestStatus::Passed) TODO: control this via params
             .map(|t| {
                 vec![
@@ -64,12 +86,20 @@ impl From<Vec<TestReport>> for SlackReport {
         let mut blocks = vec![header_block];
         blocks.append(&mut section_blocks);
 
-        Self {
-            title:
-                ":java::fire: Acceptance tests are failing in Sandbox on the Java backend library!"
-                    .to_string(),
-            blocks,
-        }
+        SlackReport { blocks }
+    }
+}
+
+impl From<TestResult> for Vec<Block> {
+    fn from(test_result: TestResult) -> Self {
+        vec![
+            Block::Divider,
+            Block::Section {
+                text: MarkdownText {
+                    text: test_result.to_string(),
+                },
+            },
+        ]
     }
 }
 

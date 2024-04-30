@@ -1,18 +1,33 @@
 use anyhow::Result;
+use clap::Parser;
 use glob::glob;
 use reportly::{
     parsers::{junit::JunitTestParser, parsers::TestParser},
     reporters::slack::SlackReport,
-    TestReport,
+    TestResult,
 };
+
+#[derive(Parser)]
+struct Args {
+    /// The title of the test report
+    #[arg(short, long, default_value_t = String::from("Test report"))]
+    report_title: String,
+    /// The test report pattern to look for
+    #[arg(short, long)]
+    test_reports_pattern: String,
+}
 
 //TODO: remove code that panics
 fn main() {
-    let test_reports_pattern = std::env::args().nth(1).expect("no test-reports pattern given");
+    let args = Args::parse();
 
-    let report: SlackReport = build_reports(&test_reports_pattern)
-        .expect("Unable to create test report")
-        .into();
+    let junit_test_results =
+        parse_test_results(&args.test_reports_pattern).expect("Unable to create test report");
+
+    let report = SlackReport::builder()
+        .with_title(args.report_title)
+        .with_test_blocks(junit_test_results)
+        .build();
 
     println!(
         "{}",
@@ -21,20 +36,20 @@ fn main() {
 }
 
 // TODO: use a builder
-fn build_reports(junit_reports_file_pattern: &str) -> Result<Vec<TestReport>> {
-    let mut reports: Vec<TestReport> = vec![];
+fn parse_test_results(junit_reports_file_pattern: &str) -> Result<Vec<TestResult>> {
+    let mut test_results: Vec<TestResult> = vec![];
     for test_file in glob(junit_reports_file_pattern).expect("something went wrong") {
         match test_file {
             Ok(path) => {
                 let junit_parser = JunitTestParser {
                     file_name: path.to_str().unwrap().to_string(),
                 };
-                let report: TestReport = junit_parser.parse()?;
-                reports.push(report);
+                let mut individual_test_results = junit_parser.parse()?;
+                test_results.append(&mut individual_test_results);
             }
             Err(e) => println!("{:?}", e),
         }
     }
 
-    Ok(reports)
+    Ok(test_results)
 }

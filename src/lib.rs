@@ -1,10 +1,6 @@
 pub mod parsers;
 pub mod reporters;
 
-pub struct TestReport {
-    pub file_name: String,
-    pub results: Vec<TestResult>,
-}
 pub struct TestResult {
     pub name: String,
     pub suite_name: Option<String>,
