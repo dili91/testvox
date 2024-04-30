@@ -1,7 +1,7 @@
 name: 'Reportly'
 description: 'Turn test results into useful reports'
 inputs:
-  report_title:
+  title:
     description: 'The report title'
     required: true
     default: "My simple test report"
@@ -17,5 +17,5 @@ runs:
   image: 'Dockerfile'
   entrypoint: /reportly/entrypoint.sh
   args:
-    - "${{ inputs.report_title }}"
+    - "${{ inputs.title }}"
     - "/reportly/${{ inputs.test_reports_pattern }}"
