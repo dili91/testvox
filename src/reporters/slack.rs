@@ -70,7 +70,7 @@ impl SlackReportBuilder {
             .test_results
             .into_iter()
             //.filter(|t| t.status != TestStatus::Passed) TODO: control this via params
-            .map(|t| {
+            .flat_map(|t| {
                 vec![
                     Block::Divider,
                     Block::Section {
@@ -80,7 +80,6 @@ impl SlackReportBuilder {
                     },
                 ]
             })
-            .flatten()
             .collect();
 
         let mut blocks = vec![header_block];

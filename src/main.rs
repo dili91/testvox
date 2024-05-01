@@ -23,7 +23,6 @@ fn main() {
     // Parse test results
     let junit_test_results: Vec<TestResult> = glob(&args.test_reports_pattern)
         .expect("Unable to use given file pattern")
-        .into_iter()
         .filter_map(|test_file| test_file.ok())
         .map(|test_file| JunitTestParser::new(test_file).parse())
         .filter_map(|test_results| test_results.ok())
