@@ -1,4 +1,3 @@
-use anyhow::Result;
 use clap::Parser;
 use glob::glob;
 use reportly::{
@@ -17,13 +16,21 @@ struct Args {
     test_reports_pattern: String,
 }
 
-//TODO: remove code that panics
 fn main() {
+    // Parse CLI arguments
     let args = Args::parse();
 
-    let junit_test_results =
-        parse_test_results(&args.test_reports_pattern).expect("Unable to create test report");
+    // Parse test results
+    let junit_test_results: Vec<TestResult> = glob(&args.test_reports_pattern)
+        .expect("Unable to use given file pattern")
+        .into_iter()
+        .filter_map(|test_file| test_file.ok())
+        .map(|test_file| JunitTestParser::new(test_file).parse())
+        .filter_map(|test_results| test_results.ok())
+        .flatten()
+        .collect();
 
+    // Build the final report
     let report = SlackReport::builder()
         .with_title(args.report_title)
         .with_test_blocks(junit_test_results)
@@ -33,23 +40,4 @@ fn main() {
         "{}",
         serde_json::to_string_pretty(&report).expect("unable to serialize to JSON string")
     )
-}
-
-// TODO: use a builder
-fn parse_test_results(junit_reports_file_pattern: &str) -> Result<Vec<TestResult>> {
-    let mut test_results: Vec<TestResult> = vec![];
-    for test_file in glob(junit_reports_file_pattern).expect("something went wrong") {
-        match test_file {
-            Ok(path) => {
-                let junit_parser = JunitTestParser {
-                    file_name: path.to_str().unwrap().to_string(),
-                };
-                let mut individual_test_results = junit_parser.parse()?;
-                test_results.append(&mut individual_test_results);
-            }
-            Err(e) => println!("{:?}", e),
-        }
-    }
-
-    Ok(test_results)
 }

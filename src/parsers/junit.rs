@@ -1,17 +1,23 @@
 use crate::{TestResult, TestStatus};
 use anyhow::Result;
 use roxmltree::{Document, Node};
-use std::fs;
+use std::{fs, path::PathBuf};
 
 use super::parsers::TestParser;
 
 pub struct JunitTestParser {
-    pub file_name: String,
+    pub test_file: PathBuf,
+}
+
+impl JunitTestParser {
+    pub fn new(test_file: PathBuf) -> Self {
+        Self { test_file }
+    }
 }
 
 impl TestParser for JunitTestParser {
     fn parse(&self) -> Result<Vec<TestResult>> {
-        let junit_report = fs::read_to_string(&self.file_name)?;
+        let junit_report = fs::read_to_string(&self.test_file)?;
 
         let doc = Document::parse(junit_report.as_str())?;
 
