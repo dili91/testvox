@@ -1,7 +1,7 @@
 use clap::Parser;
 use glob::glob;
 use reportly::{
-    parsers::{junit::JunitTestParser, parsers::TestParser},
+    parsers::{junit::JunitTestParser, TestParser},
     reporters::slack::SlackReport,
     TestResult,
 };
@@ -38,6 +38,6 @@ fn main() {
 
     println!(
         "{}",
-        serde_json::to_string_pretty(&report).expect("unable to serialize to JSON string")
+        serde_json::to_string_pretty(&report).expect("unable to serialize to JSON")
     )
 }

@@ -1,10 +1,8 @@
 pub mod junit;
 
-pub mod parsers {
-    use crate::TestResult;
-    use anyhow::Result;
+use crate::TestResult;
+use anyhow::Result;
 
-    pub trait TestParser {
-        fn parse(&self) -> Result<Vec<TestResult>>;
-    }
+pub trait TestParser {
+    fn parse(&self) -> Result<Vec<TestResult>>;
 }

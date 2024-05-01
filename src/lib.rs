@@ -30,7 +30,9 @@ impl MarkdownTestResult for TestResult {
                 "❌ _{}_ *failed* (`{}s`): ```{}```",
                 self.name,
                 self.execution_time,
-                self.failure.clone().expect("missing failure message")
+                self.failure
+                    .clone()
+                    .unwrap_or("⚠️ missing failure message".to_string())
             ),
             TestStatus::Skipped => format!("⏭️ _{}_ was *skipped*", self.name),
         }

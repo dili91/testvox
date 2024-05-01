@@ -3,7 +3,7 @@ use anyhow::Result;
 use roxmltree::{Document, Node};
 use std::{fs, path::PathBuf};
 
-use super::parsers::TestParser;
+use super::TestParser;
 
 pub struct JunitTestParser {
     pub test_file: PathBuf,
