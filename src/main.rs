@@ -7,7 +7,7 @@ use reportly::{
 };
 
 #[derive(Parser)]
-struct Args {
+struct CliArgs {
     /// The title of the test report
     #[arg(short, long, default_value_t = String::from("Test report"))]
     report_title: String,
@@ -18,7 +18,7 @@ struct Args {
 
 fn main() {
     // Parse CLI arguments
-    let args = Args::parse();
+    let args = CliArgs::parse();
 
     // Parse test results
     let junit_test_results: Vec<TestResult> = glob(&args.test_reports_pattern)
