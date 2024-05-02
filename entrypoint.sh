@@ -21,7 +21,7 @@ while (( "$#" )); do
         --include-skipped|--include-passed)
             if [ -n "$2" ] && [ ${2:0:1} != "-" ]; then
                 if [ "$2" = true ] ; then
-                    REPORTLY_OPTS+=" $1"
+                    REPORTLY_OPTS+="$1"
                 fi
             shift 2
             else
@@ -37,5 +37,5 @@ while (( "$#" )); do
 done
 
 echo 'REPORT<<EOF' >> $GITHUB_OUTPUT
-reportly "$REPORTLY_OPTS" "$REPORTLY_ARGS" >> $GITHUB_OUTPUT
+reportly $REPORTLY_OPTS $REPORTLY_ARGS >> $GITHUB_OUTPUT
 echo 'EOF' >> $GITHUB_OUTPUT
