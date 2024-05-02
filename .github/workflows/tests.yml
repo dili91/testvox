@@ -2,7 +2,7 @@ on: [push]
 
 jobs:
   tests:
-    name: Test reports generation from Junit results
+    name: Junit test report generation
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
