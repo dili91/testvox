@@ -5,7 +5,7 @@ use glob::glob;
 use reportly::{
     parsers::{junit::JunitTestParser, TestParser},
     reporters::slack::SlackReport,
-    TestResult,
+    TestResult, TestStatus,
 };
 
 #[derive(Parser)]
@@ -16,13 +16,17 @@ struct CliArgs {
     /// The test report pattern to look for
     #[arg(short, long)]
     test_reports_pattern: String,
+    #[arg(long, default_value_t = false)]
+    include_skipped: bool,
+    #[arg(long, default_value_t = false)]
+    include_passed: bool,
 }
 
 fn main() {
     // Parse CLI arguments
-    let args = CliArgs::parse();
+    let cli_args = CliArgs::parse();
 
-    let test_results_files = glob(&args.test_reports_pattern)
+    let test_results_files = glob(&cli_args.test_reports_pattern)
         .expect("Unable to use given file pattern")
         .filter_map(|test_file| test_file.ok())
         .collect::<Vec<PathBuf>>();
@@ -32,21 +36,40 @@ fn main() {
         return;
     }
 
+    // Automatically detect test parser and flatten all results into a single array of results
     let test_results: Vec<TestResult> = test_results_files
         .into_iter()
-        .map(|test_file| JunitTestParser::new(test_file).parse())
+        .map(|test_file| detect_parser(test_file).parse())
         .filter_map(|test_results| test_results.ok())
         .flatten()
+        .filter(|test_result| {
+            is_reportable(
+                test_result,
+                cli_args.include_skipped,
+                cli_args.include_passed,
+            )
+        })
         .collect();
 
     // Build and print the final report
     let report = SlackReport::builder()
-        .with_title(args.report_title)
-        .with_test_blocks(test_results)
+        .with_title(cli_args.report_title)
+        .with_test_results(test_results)
         .build();
 
     println!(
         "{}",
         serde_json::to_string_pretty(&report).expect("unable to serialize to JSON")
     )
+}
+
+fn detect_parser(test_file: PathBuf) -> Box<dyn TestParser> {
+    //TODO
+    Box::new(JunitTestParser::new(test_file))
+}
+
+fn is_reportable(test_result: &TestResult, include_skipped: bool, include_passed: bool) -> bool {
+    test_result.status == TestStatus::Failed
+        || (test_result.status == TestStatus::Skipped && include_skipped)
+        || (test_result.status == TestStatus::Passed && include_passed)
 }

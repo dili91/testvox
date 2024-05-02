@@ -44,7 +44,7 @@ impl SlackReportBuilder {
     pub fn new() -> SlackReportBuilder {
         SlackReportBuilder {
             title: String::from("Test report"),
-            test_results: vec![],
+            ..Default::default()
         }
     }
 
@@ -53,7 +53,7 @@ impl SlackReportBuilder {
         self
     }
 
-    pub fn with_test_blocks(mut self, test_blocks: Vec<TestResult>) -> SlackReportBuilder {
+    pub fn with_test_results(mut self, test_blocks: Vec<TestResult>) -> SlackReportBuilder {
         self.test_results = test_blocks;
         self
     }
@@ -69,7 +69,6 @@ impl SlackReportBuilder {
         let mut section_blocks: Vec<Block> = self
             .test_results
             .into_iter()
-            //.filter(|t| t.status != TestStatus::Passed) TODO: control this via params
             .flat_map(|t| {
                 vec![
                     Block::Divider,

@@ -16,7 +16,10 @@ build:
     cargo build
 
 run test_reports_pattern=default_test_reports_pattern:
-    cargo run -- --report-title "A simple test report" --test-reports-pattern "{{test_reports_pattern}}"
+    cargo run -- \
+    --include-skipped \
+    --report-title "A simple test report" \
+    --test-reports-pattern "{{test_reports_pattern}}"
 
 test: 
     cargo nextest run
