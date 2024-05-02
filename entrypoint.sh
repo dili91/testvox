@@ -1,11 +1,9 @@
 #!/bin/bash
 # This entrypoint is only use by Github actions
 
-ls -lah /reportly/./test-reports/**/*.xml
-
 # Set default values for options
-REPORTLY_OPTS=""
-REPORTLY_ARGS=""
+TEST_REPORTS_PATTERN=""
+REPORT_TITLE=""
 
 # Parse options and arguments
 # inspired by https://medium.com/@Drew_Stokes/bash-argument-parsing-54f3b81a6a8f
