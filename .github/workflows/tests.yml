@@ -10,7 +10,7 @@ jobs:
         name: Create Slack report from Junit results
         id: generate_slack_report
         with:
-          title: "A few tests failed on my cool project"
+          include_skipped_tests: true
           test_reports_pattern: "./test-reports/**/*.xml"
       - name: Send default test report
         uses: slackapi/slack-github-action@v1.26.0

@@ -4,11 +4,17 @@ inputs:
   title:
     description: 'The report title'
     required: true
-    default: "My simple test report"
+    default: "${{GITHUB_REPOSITORY#*/}} test report:"
   test_reports_pattern:
     description: 'Directory that contains raw test results'
     required: true
     default: "./test-reports/**/*.xml"
+  include_skipped_tests:
+    description: "Whether to include skipped tests in the report"
+    default: false
+  include_passed_tests:
+    description: "Whether to include passed tests in the report"
+    default: false
 outputs:
   report:
     description: 'A useful report'
