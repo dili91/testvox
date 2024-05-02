@@ -1,7 +1,7 @@
 on: [push]
 
 jobs:
-  test_junit_reports:
+  tests:
     name: Test reports generation from Junit results
     runs-on: ubuntu-latest
     steps:
@@ -10,7 +10,7 @@ jobs:
         name: Create Slack report from Junit results
         id: generate_slack_report
         with:
-          title: "My cool test report"
+          title: "A few tests failed on my cool project"
           test_reports_pattern: "./test-reports/**/*.xml"
       - name: Send default test report
         uses: slackapi/slack-github-action@v1.26.0
