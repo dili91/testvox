@@ -11,6 +11,7 @@ jobs:
         id: generate_slack_report
         with:
           include_skipped: true
+          report_title: test
           test_reports_pattern: "./test-reports/**/*.xml"
       - name: Send default test report
         uses: slackapi/slack-github-action@v1.26.0
