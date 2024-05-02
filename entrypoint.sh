@@ -1,5 +1,7 @@
-#!/bin/sh
+#!/bin/bash
 # This entrypoint is only use by Github actions
+
+ls -lah /reportly/./test-reports/**/*.xml
 
 # Set default values for options
 REPORTLY_OPTS=""
@@ -9,9 +11,18 @@ REPORTLY_ARGS=""
 # inspired by https://medium.com/@Drew_Stokes/bash-argument-parsing-54f3b81a6a8f
 while (( "$#" )); do
     case "$1" in
-        --test-reports-pattern|--report-title)
+        --test-reports-pattern)
             if [ -n "$2" ] && [ ${2:0:1} != "-" ]; then
-            REPORTLY_ARGS+=" $1 $2"
+            TEST_REPORTS_PATTERN="$2"
+            shift 2
+            else
+            echo "Error: Argument for $1 is missing" >&2
+            exit 1
+            fi
+            ;;
+        --report-title)
+            if [ -n "$2" ] && [ ${2:0:1} != "-" ]; then
+            REPORT_TITLE="$2"
             shift 2
             else
             echo "Error: Argument for $1 is missing" >&2
@@ -21,7 +32,7 @@ while (( "$#" )); do
         --include-skipped|--include-passed)
             if [ -n "$2" ] && [ ${2:0:1} != "-" ]; then
                 if [ "$2" = true ] ; then
-                    REPORTLY_OPTS+="$1"
+                    REPORTLY_OPTS+="$1 "
                 fi
             shift 2
             else
@@ -37,5 +48,5 @@ while (( "$#" )); do
 done
 
 echo 'REPORT<<EOF' >> $GITHUB_OUTPUT
-reportly $REPORTLY_OPTS $REPORTLY_ARGS >> $GITHUB_OUTPUT
+reportly $REPORTLY_OPTS --report-title "$REPORT_TITLE" --test-reports-pattern "$TEST_REPORTS_PATTERN"  >> $GITHUB_OUTPUT
 echo 'EOF' >> $GITHUB_OUTPUT
