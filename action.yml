@@ -23,7 +23,11 @@ runs:
   image: 'Dockerfile'
   entrypoint: /reportly/entrypoint.sh
   args:
-    - --report-title "${{ inputs.title }}"
-    - --test-reports-pattern "/reportly/${{ inputs.test_reports_pattern }}"
-    - --include-skipped "${{ inputs.include_skipped}}"
-    - --include-passed "${{ inputs.include_passed}}"
+    - --report-title
+    - "${{ inputs.title }}"
+    - --test-reports-pattern
+    - "/reportly/${{ inputs.test_reports_pattern }}"
+    - --include-skipped 
+    - "${{ inputs.include_skipped}}"
+    - --include-passed
+    - "${{ inputs.include_passed}}"
