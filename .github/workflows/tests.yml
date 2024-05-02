@@ -7,13 +7,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./ # Uses an action in the root directory
-        name: Create Slack report from Junit results
+        name: Generate report
         id: generate_slack_report
         with:
           include_skipped: true
-          title: test
           test_reports_pattern: "./test-reports/**/*.xml"
-      - name: Send default test report
+      - name: Send report
         uses: slackapi/slack-github-action@v1.26.0
         with:
           payload: ${{steps.generate_slack_report.outputs.report}}
