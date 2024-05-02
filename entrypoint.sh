@@ -9,7 +9,7 @@ REPORTLY_ARGS=""
 # inspired by https://medium.com/@Drew_Stokes/bash-argument-parsing-54f3b81a6a8f
 while (( "$#" )); do
     case "$1" in
-        --test_reports_pattern|--report_title)
+        --test-reports-pattern|--report-title)
             if [ -n "$2" ] && [ ${2:0:1} != "-" ]; then
             REPORTLY_ARGS+=" $1 $2"
             shift 2
@@ -18,7 +18,7 @@ while (( "$#" )); do
             exit 1
             fi
             ;;
-        --include_skipped|--include_passed)
+        --include-skipped|--include-passed)
             if [ -n "$2" ] && [ ${2:0:1} != "-" ]; then
                 if [ "$2" = true ] ; then
                     REPORTLY_OPTS+=" $1"
