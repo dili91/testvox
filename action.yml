@@ -4,7 +4,7 @@ inputs:
   title:
     description: 'The report title'
     required: true
-    default: "${GITHUB_REPOSITORY#*/} test report"
+    default: "${{env.GITHUB_REPOSITORY}} test report"
   test_reports_pattern:
     description: 'Directory that contains raw test results'
     required: true
