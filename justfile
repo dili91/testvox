@@ -10,7 +10,10 @@ docker-build:
     docker build . -t reportly
 
 docker-run:
-    docker run --rm --entrypoint /reportly/entrypoint.sh reportly --include-skipped true --report-title "a title" --test-reports-pattern "/reportly/{{default_test_reports_pattern}}"
+    docker run --rm --entrypoint /reportly/entrypoint.sh reportly \
+    --include-skipped true \
+    --report-title "a title" \
+    --test-reports-pattern "/reportly/test-reports/unit-tests/*.xml /reportly/test-reports/integration-tests/*.xml"
 
 build:
     cargo build

@@ -2,7 +2,7 @@
 # This entrypoint is only use by Github actions
 
 # Set default values for options
-TEST_REPORTS_PATTERN=""
+TEST_REPORTS_PATTERNS=""
 REPORT_TITLE=""
 
 # Parse options and arguments
@@ -11,20 +11,21 @@ while (( "$#" )); do
     case "$1" in
         --test-reports-pattern)
             if [ -n "$2" ] && [ ${2:0:1} != "-" ]; then
-            TEST_REPORTS_PATTERN="$2"
-            shift 2
+                # Append the pattern to the array
+                TEST_REPORTS_PATTERNS+=("$2")
+                shift 2
             else
-            echo "Error: Argument for $1 is missing" >&2
-            exit 1
+                echo "Error: Argument for $1 is missing" >&2
+                exit 1
             fi
             ;;
         --report-title)
             if [ -n "$2" ] && [ ${2:0:1} != "-" ]; then
-            REPORT_TITLE="$2"
-            shift 2
+                REPORT_TITLE="$2"
+                shift 2
             else
-            echo "Error: Argument for $1 is missing" >&2
-            exit 1
+                echo "Error: Argument for $1 is missing" >&2
+                exit 1
             fi
             ;;
         --include-skipped|--include-passed)
@@ -32,10 +33,10 @@ while (( "$#" )); do
                 if [ "$2" = true ] ; then
                     REPORTLY_OPTS+="$1 "
                 fi
-            shift 2
+                shift 2
             else
-            echo "Error: Argument for $1 is missing" >&2
-            exit 1
+                echo "Error: Argument for $1 is missing" >&2
+                exit 1
             fi
             ;;
         -*|--*=) # unsupported flags
@@ -46,5 +47,5 @@ while (( "$#" )); do
 done
 
 echo 'REPORT<<EOF' >> $GITHUB_OUTPUT
-reportly $REPORTLY_OPTS --report-title "$REPORT_TITLE" --test-reports-pattern "$TEST_REPORTS_PATTERN"  >> $GITHUB_OUTPUT
+reportly $REPORTLY_OPTS --report-title "$REPORT_TITLE" --test-reports-pattern ${TEST_REPORTS_PATTERNS[@]} >> $GITHUB_OUTPUT
 echo 'EOF' >> $GITHUB_OUTPUT

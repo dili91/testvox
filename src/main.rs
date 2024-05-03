@@ -14,8 +14,8 @@ struct CliArgs {
     #[arg(short, long, default_value_t = String::from("Test report"))]
     report_title: String,
     /// The test report pattern to look for
-    #[arg(short, long)]
-    test_reports_pattern: String,
+    #[arg(short, long, num_args(0..))]
+    test_reports_pattern: Vec<String>,
     #[arg(long, default_value_t = false)]
     include_skipped: bool,
     #[arg(long, default_value_t = false)]
@@ -26,10 +26,15 @@ fn main() {
     // Parse CLI arguments
     let cli_args = CliArgs::parse();
 
-    let test_results_files = glob(&cli_args.test_reports_pattern)
-        .expect("Unable to use given file pattern")
-        .filter_map(|test_file| test_file.ok())
-        .collect::<Vec<PathBuf>>();
+    let test_results_files: Vec<PathBuf> = 
+        cli_args.test_reports_pattern
+        .into_iter()
+        .flat_map(|pattern|{
+            glob(&pattern)
+            .expect("Unable to use given file pattern")
+            .filter_map(|test_file| test_file.ok())
+            .collect::<Vec<PathBuf>>()
+        }).collect();
 
     if test_results_files.is_empty() {
         eprintln!("Cannot find test results file");
