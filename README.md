@@ -6,10 +6,12 @@ Turns Junit test reports into readable reports, ready to be sent to known messag
 
 Todo:
 - [ ] Remove code that panics
+- [ ] Add link to test failing on CI
+- [ ] Add support for stacktraces
 - [ ] Improve CI build, linting, ecc
 - [ ] improve test coverage
 - [ ] test extendibility 
-- [ ] Support setting passed and/or failed via flag
+- [x] Support setting passed and/or failed via flag
 - [ ] Review methods visibility
 - [ ] Test with real project
 - [ ] Support other test frameworks: js, .net...
