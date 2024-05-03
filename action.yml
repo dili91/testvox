@@ -26,7 +26,7 @@ runs:
     - --report-title
     - "${{ inputs.title }}"
     - --test-reports-pattern
-    - "/reportly/${{ inputs.test_reports_pattern }}"
+    - "/github/workspace/${{ inputs.test_reports_pattern }}"
     - --include-skipped 
     - "${{ inputs.include_skipped}}"
     - --include-passed

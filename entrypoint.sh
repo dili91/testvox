@@ -45,10 +45,6 @@ while (( "$#" )); do
     esac
 done
 
-cat /github/workspace/README.md
-
-ls -lah /github/workspace/app/build/test-results/**/*.xml
-
 echo 'REPORT<<EOF' >> $GITHUB_OUTPUT
 reportly $REPORTLY_OPTS --report-title "$REPORT_TITLE" --test-reports-pattern "$TEST_REPORTS_PATTERN"  >> $GITHUB_OUTPUT
 echo 'EOF' >> $GITHUB_OUTPUT
