@@ -6,6 +6,7 @@ Turns Junit test reports into readable reports, ready to be sent to known messag
 
 Todo:
 - [ ] Remove code that panics
+- [ ] Supports defining multiple reports patterns via GH action
 - [ ] Add link to test failing on CI
 - [ ] Add support for stacktraces
 - [ ] Improve CI build, linting, ecc

@@ -8,7 +8,7 @@ inputs:
   test_reports_pattern:
     description: 'Directory that contains raw test results'
     required: true
-    default: '["./test-reports/unit-tests/*.xml", "./test-reports/integration-tests/*.xml"]'
+    default: "./build/test-results/*.xml"
   include_skipped:
     description: "Whether to include skipped tests in the report"
     default: false
@@ -23,13 +23,10 @@ runs:
   image: 'Dockerfile'
   entrypoint: /reportly/entrypoint.sh
   args:
-    - --include-skipped 
     - "${{ inputs.include_skipped}}"
-    - --include-passed
     - "${{ inputs.include_passed}}"
     - --report-title
     - "${{ inputs.title }}"
-    - --test-reports-pattern
-    - "/github/workspace/${{ fromJSON(inputs.test_reports_pattern)}}"
+    - "/github/workspace/${{inputs.test_reports_pattern}}"
 
 

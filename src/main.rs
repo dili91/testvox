@@ -13,28 +13,33 @@ struct CliArgs {
     /// The title of the test report
     #[arg(short, long, default_value_t = String::from("Test report"))]
     report_title: String,
-    /// The test report pattern to look for
-    #[arg(short, long, num_args(0..))]
-    test_reports_pattern: Vec<String>,
     #[arg(long, default_value_t = false)]
     include_skipped: bool,
     #[arg(long, default_value_t = false)]
     include_passed: bool,
+    /// The test report pattern to look for
+    #[arg(
+        num_args(1..),
+        value_delimiter= ',',
+        default_value = "./build/test-results/**/*.xml,./app/build/test-results/**/*.xml")
+    ]
+    test_reports_pattern: Vec<String>,
 }
 
 fn main() {
     // Parse CLI arguments
     let cli_args = CliArgs::parse();
 
-    let test_results_files: Vec<PathBuf> = 
-        cli_args.test_reports_pattern
+    let test_results_files: Vec<PathBuf> = cli_args
+        .test_reports_pattern
         .into_iter()
-        .flat_map(|pattern|{
+        .flat_map(|pattern| {
             glob(&pattern)
-            .expect("Unable to use given file pattern")
-            .filter_map(|test_file| test_file.ok())
-            .collect::<Vec<PathBuf>>()
-        }).collect();
+                .expect("Unable to use given file pattern")
+                .filter_map(|test_file| test_file.ok())
+                .collect::<Vec<PathBuf>>()
+        })
+        .collect();
 
     if test_results_files.is_empty() {
         eprintln!("Cannot find test results file");
