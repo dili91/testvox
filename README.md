@@ -10,6 +10,7 @@ Todo:
 - [ ] Add support for stacktraces
 - [ ] Improve CI build, linting, ecc
 - [ ] improve test coverage
+- [ ] Deterministic ordering: failed, skipped, passed
 - [ ] test extendibility 
 - [x] Support setting passed and/or failed via flag
 - [ ] Review methods visibility
