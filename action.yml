@@ -25,7 +25,6 @@ runs:
   args:
     - "${{ inputs.include_skipped}}"
     - "${{ inputs.include_passed}}"
-    - --report-title
     - "${{ inputs.title }}"
     - "/github/workspace/${{inputs.test_reports_pattern}}"
 
