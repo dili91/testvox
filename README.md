@@ -1,6 +1,11 @@
-# Testvox
+<div align="center">
+ <img src="./logo.png" width="300" alt="pavex">
+ <strong>
+   Turn test results into simple, human readable reports
+ </strong>
+</div>
 
-Turn test results into simple, human readable reports.
+
 
 Todo:
 - `v1.0.0`
