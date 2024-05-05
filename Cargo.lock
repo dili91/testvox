@@ -139,18 +139,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "reportly"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "clap",
- "glob",
- "roxmltree",
- "serde",
- "serde_json",
-]
-
-[[package]]
 name = "roxmltree"
 version = "0.19.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -208,6 +196,18 @@ dependencies = [
  "proc-macro2",
  "quote",
  "unicode-ident",
+]
+
+[[package]]
+name = "testvox"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "clap",
+ "glob",
+ "roxmltree",
+ "serde",
+ "serde_json",
 ]
 
 [[package]]

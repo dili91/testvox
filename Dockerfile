@@ -1,7 +1,7 @@
 FROM rust:1.77.2-slim-bookworm
 
-COPY . /reportly
+COPY . /testvox
 
-RUN cargo install --path /reportly
+RUN cargo install --path /testvox
 
-ENTRYPOINT ["reportly"]
+ENTRYPOINT ["testvox"]

@@ -1,8 +1,6 @@
-# Reportly
+# Testvox
 
-Report, simply.
-
-Turns Junit test reports into readable reports, ready to be sent to known messaging applications.
+Turn test reports into simple, human readable reports.
 
 Todo:
 - `v1.0.0`

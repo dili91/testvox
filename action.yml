@@ -1,4 +1,4 @@
-name: 'Reportly'
+name: 'testvox'
 description: 'Turn test results into useful reports'
 inputs:
   title:
@@ -21,7 +21,7 @@ outputs:
 runs:
   using: 'docker'
   image: 'Dockerfile'
-  entrypoint: /reportly/entrypoint.sh
+  entrypoint: /testvox/entrypoint.sh
   args:
     - "${{ inputs.include_skipped}}"
     - "${{ inputs.include_passed}}"

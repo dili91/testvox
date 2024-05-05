@@ -2,7 +2,7 @@ use std::path::PathBuf;
 
 use clap::Parser;
 use glob::glob;
-use reportly::{
+use testvox::{
     parsers::{junit::JunitTestParser, TestParser},
     reporters::slack::SlackReport,
     TestResult, TestStatus,

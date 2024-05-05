@@ -1,5 +1,5 @@
 [package]
-name = "reportly"
+name = "testvox"
 version = "0.1.0"
 edition = "2021"
 authors = ["Andrea Di Lisio <andrea.dilisio91@gmail.com>"]

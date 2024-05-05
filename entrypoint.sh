@@ -16,6 +16,6 @@ if [ "$2" = true ] ; then
 fi
 
 echo 'REPORT<<EOF' >> $GITHUB_OUTPUT
-reportly $OPTS --report-title "$3" "$4" >> $GITHUB_OUTPUT
+testvox $OPTS --report-title "$3" "$4" >> $GITHUB_OUTPUT
 echo 'EOF' >> $GITHUB_OUTPUT
 

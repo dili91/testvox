@@ -7,11 +7,11 @@ alias t     := test
 default_test_reports_pattern := "./test-results/**/*.xml"
 
 docker-build:
-    docker build . -t reportly
+    docker build . -t testvox
 
 docker-run test_reports_pattern=default_test_reports_pattern:
-    docker run --rm --entrypoint /reportly/entrypoint.sh reportly \
-    true false "My test repo" "/reportly/{{test_reports_pattern}}"
+    docker run --rm --entrypoint /testvox/entrypoint.sh testvox \
+    true false "My test repo" "/testvox/{{test_reports_pattern}}"
 
 build:
     cargo build
