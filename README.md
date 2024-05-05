@@ -1,6 +1,6 @@
 # Testvox
 
-Turn test reports into simple, human readable reports.
+Turn test results into simple, human readable reports.
 
 Todo:
 - `v1.0.0`
