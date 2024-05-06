@@ -6,13 +6,66 @@ pub struct TestResult {
     pub suite_name: Option<String>,
     pub execution_time: f32,
     pub status: TestStatus,
-    pub failure: Option<String>,
+    pub failure_message: Option<String>,
 }
 
-#[derive(PartialEq)]
+#[derive(Default, Clone)]
+pub struct TestResultBuilder {
+    name: String,
+    suite_name: Option<String>,
+    pub execution_time: f32,
+    pub status: TestStatus,
+    pub failure_message: Option<String>,
+}
+
+impl TestResultBuilder {
+    pub fn with_name(mut self, name: String) -> TestResultBuilder {
+        self.name = name;
+        self
+    }
+
+    pub fn with_suite_name(mut self, suite_name: String) -> TestResultBuilder {
+        self.suite_name = Some(suite_name);
+        self
+    }
+
+    pub fn with_execution_time(mut self, execution_time: f32) -> TestResultBuilder {
+        self.execution_time = execution_time;
+        self
+    }
+
+    pub fn with_status(mut self, status: TestStatus) -> TestResultBuilder {
+        self.status = status;
+        self
+    }
+
+    pub fn with_failure_message(mut self, failure_message: String) -> TestResultBuilder {
+        self.failure_message = Some(failure_message);
+        self
+    }
+
+    pub fn build(self) -> TestResult {
+        TestResult {
+            name: self.name,
+            suite_name: self.suite_name,
+            execution_time: self.execution_time,
+            status: self.status,
+            failure_message: self.failure_message,
+        }
+    }
+}
+
+impl TestResult {
+    pub fn builder() -> TestResultBuilder {
+        TestResultBuilder::default()
+    }
+}
+
+#[derive(PartialEq, Default, Clone)]
 pub enum TestStatus {
-    Passed,
+    #[default]
     Failed,
+    Passed,
     Skipped,
 }
 
@@ -30,7 +83,7 @@ impl MarkdownTestResult for TestResult {
                 "❌ _{}_ *failed* (`{}s`): ```{}```",
                 self.name,
                 self.execution_time,
-                self.failure
+                self.failure_message
                     .clone()
                     .unwrap_or("⚠️ missing failure message".to_string())
             ),
@@ -50,7 +103,7 @@ mod tests {
             suite_name: Some("A test suite".to_string()),
             execution_time: 2.4,
             status: crate::TestStatus::Passed,
-            failure: None,
+            failure_message: None,
         };
 
         let markdown_message = test_result.to_string();
@@ -65,7 +118,7 @@ mod tests {
             suite_name: Some("A test suite".to_string()),
             execution_time: 2.4,
             status: crate::TestStatus::Skipped,
-            failure: None,
+            failure_message: None,
         };
 
         let markdown_message = test_result.to_string();
@@ -80,7 +133,7 @@ mod tests {
             suite_name: Some("A test suite".to_string()),
             execution_time: 2.4,
             status: crate::TestStatus::Failed,
-            failure: Some("A timeout occurred".to_string()),
+            failure_message: Some("A timeout occurred".to_string()),
         };
 
         let markdown_message = test_result.to_string();

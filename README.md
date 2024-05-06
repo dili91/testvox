@@ -21,7 +21,6 @@ Currently, only Github Actions are supported.
 ## `v1.0.0`
   - [ ] Remove code that panics
   - [ ] Add link to test failing on CI
-  - [ ] Add support for stacktraces
   - [ ] Improve CI build, linting, ecc
   - [ ] improve test coverage
   - [ ] Deterministic ordering: failed, skipped, passed

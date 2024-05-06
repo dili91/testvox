@@ -41,13 +41,6 @@ pub struct SlackReportBuilder {
 }
 
 impl SlackReportBuilder {
-    pub fn new() -> SlackReportBuilder {
-        SlackReportBuilder {
-            title: String::from("Test report"),
-            ..Default::default()
-        }
-    }
-
     pub fn with_title(mut self, title: String) -> SlackReportBuilder {
         self.title = title;
         self

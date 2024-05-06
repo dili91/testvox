@@ -1,5 +1,6 @@
 use crate::{TestResult, TestStatus};
 use anyhow::Result;
+use core::f32;
 use roxmltree::{Document, Node};
 use std::{fs, path::PathBuf};
 
@@ -29,39 +30,46 @@ impl TestParser for JunitTestParser {
             .collect();
 
         for test_suite in test_suites {
-            let suite_name = test_suite.attribute("name").map(|s| s.to_string());
             test_suite
                 .children()
                 .filter(|n| n.has_tag_name("testcase"))
                 .for_each(|n| {
-                    let test_name = n.attribute("name").unwrap();
+                    let mut test_result_builder = TestResult::builder().with_name(
+                        n.attribute("name")
+                            .unwrap_or("⚠️ missing test name")
+                            .to_string(),
+                    );
 
-                    // TODO: make below more compact
+                    if let Some(suite_name) = test_suite.attribute("name").map(|s| s.to_string()) {
+                        test_result_builder =
+                            test_result_builder.clone().with_suite_name(suite_name);
+                    }
+
                     if let Some(failure) = n.children().find(|n| n.has_tag_name("failure")) {
-                        test_results.push(TestResult {
-                            name: test_name.to_string(),
-                            suite_name: suite_name.clone(),
-                            execution_time: n.attribute("time").unwrap().parse().unwrap(),
-                            status: TestStatus::Failed,
-                            failure: Some(failure.attribute("message").unwrap().to_string()),
-                        })
+                        test_result_builder = test_result_builder
+                            .clone()
+                            .with_status(TestStatus::Failed)
+                            .with_failure_message(
+                                failure
+                                    .attribute("message")
+                                    .unwrap_or("⚠️ missing test name")
+                                    .to_string(),
+                            );
                     } else if n.children().any(|n| n.has_tag_name("skipped")) {
-                        test_results.push(TestResult {
-                            name: test_name.to_string(),
-                            suite_name: suite_name.clone(),
-                            execution_time: n.attribute("time").unwrap().parse().unwrap(),
-                            status: TestStatus::Skipped,
-                            failure: None,
-                        })
+                        test_result_builder =
+                            test_result_builder.clone().with_status(TestStatus::Skipped);
                     } else {
-                        test_results.push(TestResult {
-                            name: test_name.to_string(),
-                            suite_name: suite_name.clone(),
-                            execution_time: n.attribute("time").unwrap().parse().unwrap(),
-                            status: TestStatus::Passed,
-                            failure: None,
-                        })
+                        test_result_builder =
+                            test_result_builder.clone().with_status(TestStatus::Passed);
                     };
+
+                    if let Some(execution_time) = n.attribute("time") {
+                        let _ = execution_time.parse::<f32>().map(|t| {
+                            test_result_builder = test_result_builder.clone().with_execution_time(t)
+                        });
+                    }
+
+                    test_results.push(test_result_builder.build())
                 });
         }
 
