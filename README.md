@@ -19,18 +19,19 @@ Currently, only Github Actions are supported.
 
 # Todo
 ## `v1.0.0`
-  - [ ] Remove code that panics
+  - [x] Remove code that panics
+  - [ ] improve test coverage
+  - [ ] Review methods visibility
+  - [ ] Deterministic ordering: failed, skipped, passed
   - [ ] Add link to test failing on CI
   - [ ] Improve CI build, linting, ecc
-  - [ ] improve test coverage
-  - [ ] Deterministic ordering: failed, skipped, passed
   - [ ] verify extendibility 
   - [x] Support setting passed and/or failed via flag
-  - [ ] Review methods visibility
   - [ ] Test with real project
   - [ ] Review License, contributing (PRs and Issues)
 
 ## `Next releases`
   - [ ] Support other test frameworks: js, .net...
+    - [ ] Test reports detection
   - [ ] Supports defining multiple reports patterns via GH action
 
