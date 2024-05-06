@@ -1,11 +1,15 @@
 
 <p align="center">
-  <img src='logo.png' width='300px'/>
+  <img src='./images/logo.png' width='300px'/>
 </p>
 
 # Testvox: turns test reports into simple, human readable summaries
 
 Testvox is tiny Rust library with a very simple objective: turning test reports into messages that and human friendly and ready to be shared. 
+
+<p align="center">
+  <img src='./images/sample.png'/>
+</p>
 
 At the minute, it only helps turning test results in Junit format into Slack messages, but I'd like add more parsers and reporters in future.
 
