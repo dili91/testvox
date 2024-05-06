@@ -1,11 +1,5 @@
-<div align="center">
- <img src="./logo.png" width="300" alt="pavex">
- <strong>
-   Turn test results into simple, human readable reports
- </strong>
-</div>
 
-
+<img src='logo.webp' width='300px'/>
 
 Todo:
 - `v1.0.0`
