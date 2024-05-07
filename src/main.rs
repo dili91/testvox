@@ -1,5 +1,6 @@
-use std::path::PathBuf;
+use std::{fs, path::PathBuf};
 
+use anyhow::Result;
 use clap::Parser;
 use glob::glob;
 use testvox::{
@@ -49,7 +50,11 @@ fn main() {
     // Automatically detect test parser and flatten all results into a single array of results
     let test_results: Vec<TestResult> = test_results_files
         .into_iter()
-        .map(|test_file| detect_parser(test_file).parse())
+        .map(|test_file| {
+            detect_parser(test_file)
+                .expect("Unable to detect test parser")
+                .parse()
+        })
         .filter_map(|test_results| test_results.ok())
         .flatten()
         .filter(|test_result| {
@@ -73,9 +78,9 @@ fn main() {
     )
 }
 
-fn detect_parser(test_file: PathBuf) -> Box<dyn TestParser> {
-    //TODO
-    Box::new(JunitTestParser::new(test_file))
+fn detect_parser(test_file: PathBuf) -> Result<Box<dyn TestParser>> {
+    let content = fs::read_to_string(test_file)?;
+    Ok(Box::new(JunitTestParser::from(content)))
 }
 
 fn is_reportable(test_result: &TestResult, include_skipped: bool, include_passed: bool) -> bool {

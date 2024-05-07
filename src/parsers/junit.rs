@@ -7,20 +7,18 @@ use std::{fs, path::PathBuf};
 use super::TestParser;
 
 pub struct JunitTestParser {
-    pub test_file: PathBuf,
+    pub content: String,
 }
 
 impl JunitTestParser {
-    pub fn new(test_file: PathBuf) -> Self {
-        Self { test_file }
+    pub fn from(content: String) -> Self {
+        Self { content }
     }
 }
 
 impl TestParser for JunitTestParser {
     fn parse(&self) -> Result<Vec<TestResult>> {
-        let junit_report = fs::read_to_string(&self.test_file)?;
-
-        let doc = Document::parse(junit_report.as_str())?;
+        let doc = Document::parse(self.content.as_str())?;
 
         let mut test_results: Vec<TestResult> = vec![];
 
@@ -79,8 +77,46 @@ impl TestParser for JunitTestParser {
 
 #[cfg(test)]
 mod tests {
+    use std::fs;
+
+    use crate::parsers::TestParser;
+
+    use super::JunitTestParser;
+
     #[test]
-    fn should_parse_junit_test_report() {
-        todo!()
+    fn should_parse_junit_test_report_into_test_results() {
+        println!("{}", fs::read_to_string("./test-results/basic/junit-basic.xml").unwrap());
+
+        // Arrange
+        let junit_test_results_contents = "
+        <?xml version=\"1.0\" encoding=\"UTF-8\"?>
+        <testsuites time=\"15.682687\">
+            <testsuite name=\"Tests.Registration\" time=\"6.605871\">
+                <testcase name=\"testCase1\" classname=\"Tests.Registration\" time=\"2.113871\" />
+                <testcase name=\"testCase2\" classname=\"Tests.Registration\" time=\"1.051\" />
+                <testcase name=\"testCase3\" classname=\"Tests.Registration\" time=\"3.441\" />
+            </testsuite>
+            <testsuite name=\"Tests.Authentication\" time=\"9.076816\">
+                <testsuite name=\"Tests.Authentication.Login\" time=\"4.356\">
+                    <testcase name=\"testCase4\" classname=\"Tests.Authentication.Login\" time=\"2.244\" />
+                    <testcase name=\"testCase5\" classname=\"Tests.Authentication.Login\" time=\"0.781\" />
+                    <testcase name=\"testCase6\" classname=\"Tests.Authentication.Login\" time=\"1.331\" />
+                </testsuite>
+                <testcase name=\"testCase7\" classname=\"Tests.Authentication\" time=\"2.508\" />
+                <testcase name=\"testCase8\" classname=\"Tests.Authentication\" time=\"1.230816\" />
+                <testcase name=\"testCase9\" classname=\"Tests.Authentication\" time=\"0.982\">
+                    <failure message=\"Assertion error message\" type=\"AssertionError\">
+                        <!-- Call stack printed here -->
+                    </failure>            
+                </testcase>
+            </testsuite>
+        </testsuites>";
+        let junit_parser = JunitTestParser::from(junit_test_results_contents.to_string());
+
+        // Act
+        let test_results = junit_parser.parse().expect("Unable to parse test results content");
+
+        // Assert
+        assert_eq!(test_results.len(), 3)
     }
 }
