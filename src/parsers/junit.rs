@@ -77,7 +77,7 @@ impl TestParser for JunitTestParser {
 #[cfg(test)]
 mod tests {
     use super::JunitTestParser;
-    use crate::parsers::TestParser;
+    use crate::{parsers::TestParser, TestStatus};
     use indoc::indoc;
 
     #[test]
@@ -88,17 +88,13 @@ mod tests {
             <testsuites time=\"15.682687\">
                 <testsuite name=\"Tests.Registration\" time=\"6.605871\">
                     <testcase name=\"testCase1\" classname=\"Tests.Registration\" time=\"2.113871\" />
-                    <testcase name=\"testCase2\" classname=\"Tests.Registration\" time=\"1.051\" />
-                    <testcase name=\"testCase3\" classname=\"Tests.Registration\" time=\"3.441\" />
                 </testsuite>
                 <testsuite name=\"Tests.Authentication\" time=\"9.076816\">
                     <testsuite name=\"Tests.Authentication.Login\" time=\"4.356\">
-                        <testcase name=\"testCase4\" classname=\"Tests.Authentication.Login\" time=\"2.244\" />
-                        <testcase name=\"testCase5\" classname=\"Tests.Authentication.Login\" time=\"0.781\" />
-                        <testcase name=\"testCase6\" classname=\"Tests.Authentication.Login\" time=\"1.331\" />
+                        <testcase name=\"testCase4\" classname=\"Tests.Authentication.Login\" >
+                            <skipped/>
+                        </testcase>
                     </testsuite>
-                    <testcase name=\"testCase7\" classname=\"Tests.Authentication\" time=\"2.508\" />
-                    <testcase name=\"testCase8\" classname=\"Tests.Authentication\" time=\"1.230816\" />
                     <testcase name=\"testCase9\" classname=\"Tests.Authentication\" time=\"0.982\">
                         <failure message=\"Assertion error message\" type=\"AssertionError\">
                             <!-- Call stack printed here -->
@@ -115,7 +111,31 @@ mod tests {
             .expect("Unable to parse test results content");
 
         // Assert
-        assert_eq!(test_results.len(), 9);
-        todo!("to complete")
+        assert_eq!(test_results.len(), 3);
+        assert_eq!(test_results.iter().filter(|t| t.status == TestStatus::Passed).count() , 1);
+        assert_eq!(test_results.iter().filter(|t| t.status == TestStatus::Skipped).count(), 1);
+        assert_eq!(test_results.iter().filter(|t| t.status == TestStatus::Failed).count(), 1);
+        
+        // tests are ordered by status: Failed, Skipped, Passed
+        let first = test_results.get(0).unwrap();
+        assert_eq!(first.name, "testCase9");
+        assert_eq!(first.suite_name, Some("Tests.Authentication".to_string()));
+        assert!(matches!(first.status, TestStatus::Failed,));
+        assert_eq!(first.failure_message, Some("Assertion error message".to_string()));
+        assert_eq!(first.execution_time, 2.113871);
+
+        let second = test_results.get(1).unwrap();
+        assert_eq!(second.name, "testCase4");
+        assert_eq!(second.suite_name, Some("Tests.Authentication.Login".to_string()));
+        assert!(matches!(second.status, TestStatus::Skipped,));
+        assert!(second.failure_message.is_none());
+        assert_eq!(second.execution_time, 4.356);
+
+        let third = test_results.get(2).unwrap();
+        assert_eq!(third.name, "testCase1");
+        assert_eq!(third.suite_name, Some("Tests.Registration".to_string()));
+        assert!(matches!(third.status, TestStatus::Passed,));
+        assert!(third.failure_message.is_none());
+        assert_eq!(third.execution_time, 2.113871);
     }
 }
