@@ -115,7 +115,7 @@ mod tests {
             .expect("Unable to parse test results content");
 
         // Assert
-        assert_eq!(test_results.len(), 9)
+        assert_eq!(test_results.len(), 9);
         todo!("to complete")
     }
 }
