@@ -9,6 +9,20 @@ pub struct TestResult {
     pub failure_message: Option<String>,
 }
 
+impl TestResult {
+    pub fn builder() -> TestResultBuilder {
+        TestResultBuilder::default()
+    }
+}
+
+#[derive(PartialEq, Default, Clone)]
+pub enum TestStatus {
+    #[default]
+    Failed,
+    Passed,
+    Skipped,
+}
+
 #[derive(Default, Clone)]
 pub struct TestResultBuilder {
     name: String,
@@ -53,20 +67,6 @@ impl TestResultBuilder {
             failure_message: self.failure_message,
         }
     }
-}
-
-impl TestResult {
-    pub fn builder() -> TestResultBuilder {
-        TestResultBuilder::default()
-    }
-}
-
-#[derive(PartialEq, Default, Clone)]
-pub enum TestStatus {
-    #[default]
-    Failed,
-    Passed,
-    Skipped,
 }
 
 pub trait MarkdownTestResult {

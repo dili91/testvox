@@ -74,7 +74,7 @@ fn main() {
 
     println!(
         "{}",
-        serde_json::to_string_pretty(&report).expect("unable to serialize to JSON")
+        serde_json::to_string_pretty(&report).expect("unable to serialize to JSON") // TODO: pretty printing is parser-specific. Move it there
     )
 }
 
