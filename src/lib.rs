@@ -1,10 +1,12 @@
+use std::cmp::Ordering;
+
 pub mod parsers;
 pub mod reporters;
 
 pub struct TestResult {
     pub name: String,
     pub suite_name: Option<String>,
-    pub execution_time: f32,
+    pub execution_time: Option<f32>,
     pub status: TestStatus,
     pub failure_message: Option<String>,
 }
@@ -15,7 +17,7 @@ impl TestResult {
     }
 }
 
-#[derive(PartialEq, Default, Clone)]
+#[derive(PartialEq, Eq, Default, Clone)]
 pub enum TestStatus {
     #[default]
     Failed,
@@ -23,11 +25,31 @@ pub enum TestStatus {
     Skipped,
 }
 
+impl Ord for TestStatus {
+    fn cmp(&self, other: &Self) -> Ordering {
+        match (self, other) {
+            (TestStatus::Failed, TestStatus::Failed) => Ordering::Equal,
+            (TestStatus::Failed, _) => Ordering::Less,
+            (_, TestStatus::Failed) => Ordering::Greater,
+            (TestStatus::Skipped, TestStatus::Skipped) => Ordering::Equal,
+            (TestStatus::Skipped, _) => Ordering::Less,
+            (_, TestStatus::Skipped) => Ordering::Greater,
+            (TestStatus::Passed, TestStatus::Passed) => Ordering::Equal,
+        }
+    }
+}
+
+impl PartialOrd for TestStatus {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
 #[derive(Default, Clone)]
 pub struct TestResultBuilder {
     name: String,
     suite_name: Option<String>,
-    pub execution_time: f32,
+    pub execution_time: Option<f32>,
     pub status: TestStatus,
     pub failure_message: Option<String>,
 }
@@ -44,7 +66,7 @@ impl TestResultBuilder {
     }
 
     pub fn with_execution_time(mut self, execution_time: f32) -> TestResultBuilder {
-        self.execution_time = execution_time;
+        self.execution_time = Some(execution_time);
         self
     }
 
@@ -77,12 +99,16 @@ impl MarkdownTestResult for TestResult {
     fn to_string(&self) -> String {
         match self.status {
             TestStatus::Passed => {
-                format!("✅ _{}_ *passed* (`{}s`)", self.name, self.execution_time)
+                format!(
+                    "✅ _{}_ *passed* (`{}s`)",
+                    self.name,
+                    self.execution_time.unwrap_or(0.0)
+                )
             }
             TestStatus::Failed => format!(
                 "❌ _{}_ *failed* (`{}s`): ```{}```",
                 self.name,
-                self.execution_time,
+                self.execution_time.unwrap_or(0.0),
                 self.failure_message
                     .clone()
                     .unwrap_or("⚠️ missing failure message".to_string())
@@ -101,7 +127,7 @@ mod tests {
         let test_result = TestResult {
             name: "SomeTest".to_string(),
             suite_name: Some("A test suite".to_string()),
-            execution_time: 2.4,
+            execution_time: Some(2.4),
             status: crate::TestStatus::Passed,
             failure_message: None,
         };
@@ -116,7 +142,7 @@ mod tests {
         let test_result = TestResult {
             name: "SomeTest".to_string(),
             suite_name: Some("A test suite".to_string()),
-            execution_time: 2.4,
+            execution_time: Some(2.4),
             status: crate::TestStatus::Skipped,
             failure_message: None,
         };
@@ -131,7 +157,7 @@ mod tests {
         let test_result = TestResult {
             name: "SomeTest".to_string(),
             suite_name: Some("A test suite".to_string()),
-            execution_time: 2.4,
+            execution_time: Some(2.4),
             status: crate::TestStatus::Failed,
             failure_message: Some("A timeout occurred".to_string()),
         };

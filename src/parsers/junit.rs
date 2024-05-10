@@ -89,8 +89,8 @@ mod tests {
                 <testsuite name=\"Tests.Registration\" time=\"6.605871\">
                     <testcase name=\"testCase1\" classname=\"Tests.Registration\" time=\"2.113871\" />
                 </testsuite>
-                <testsuite name=\"Tests.Authentication\" time=\"9.076816\">
-                    <testsuite name=\"Tests.Authentication.Login\" time=\"4.356\">
+                <testsuite name=\"Tests.Authentication\">
+                    <testsuite name=\"Tests.Authentication.Login\">
                         <testcase name=\"testCase4\" classname=\"Tests.Authentication.Login\" >
                             <skipped/>
                         </testcase>
@@ -112,30 +112,54 @@ mod tests {
 
         // Assert
         assert_eq!(test_results.len(), 3);
-        assert_eq!(test_results.iter().filter(|t| t.status == TestStatus::Passed).count() , 1);
-        assert_eq!(test_results.iter().filter(|t| t.status == TestStatus::Skipped).count(), 1);
-        assert_eq!(test_results.iter().filter(|t| t.status == TestStatus::Failed).count(), 1);
-        
+        assert_eq!(
+            test_results
+                .iter()
+                .filter(|t| t.status == TestStatus::Passed)
+                .count(),
+            1
+        );
+        assert_eq!(
+            test_results
+                .iter()
+                .filter(|t| t.status == TestStatus::Skipped)
+                .count(),
+            1
+        );
+        assert_eq!(
+            test_results
+                .iter()
+                .filter(|t| t.status == TestStatus::Failed)
+                .count(),
+            1
+        );
+
         // tests are ordered by status: Failed, Skipped, Passed
         let first = test_results.get(0).unwrap();
         assert_eq!(first.name, "testCase9");
         assert_eq!(first.suite_name, Some("Tests.Authentication".to_string()));
         assert!(matches!(first.status, TestStatus::Failed,));
-        assert_eq!(first.failure_message, Some("Assertion error message".to_string()));
-        assert_eq!(first.execution_time, 2.113871);
+        assert_eq!(
+            first.failure_message,
+            Some("Assertion error message".to_string())
+        );
+        assert_eq!(first.execution_time, Some(0.982));
 
         let second = test_results.get(1).unwrap();
         assert_eq!(second.name, "testCase4");
-        assert_eq!(second.suite_name, Some("Tests.Authentication.Login".to_string()));
+        assert_eq!(
+            second.suite_name,
+            Some("Tests.Authentication.Login".to_string())
+        );
         assert!(matches!(second.status, TestStatus::Skipped,));
         assert!(second.failure_message.is_none());
-        assert_eq!(second.execution_time, 4.356);
+        assert!(second.execution_time.is_none());
 
         let third = test_results.get(2).unwrap();
         assert_eq!(third.name, "testCase1");
         assert_eq!(third.suite_name, Some("Tests.Registration".to_string()));
         assert!(matches!(third.status, TestStatus::Passed,));
         assert!(third.failure_message.is_none());
-        assert_eq!(third.execution_time, 2.113871);
+        assert_eq!(third.execution_time, Some(2.113871));
     }
 }

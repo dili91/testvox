@@ -46,8 +46,9 @@ impl SlackReportBuilder {
         self
     }
 
-    pub fn with_test_results(mut self, test_blocks: Vec<TestResult>) -> SlackReportBuilder {
-        self.test_results = test_blocks;
+    pub fn with_test_results(mut self, test_results: Vec<TestResult>) -> SlackReportBuilder {
+        self.test_results = test_results;
+        self.test_results.sort_by(|a, b| a.status.cmp(&b.status));
         self
     }
 

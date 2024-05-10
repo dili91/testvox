@@ -19,6 +19,7 @@ build:
 run test_reports_pattern=default_test_reports_pattern:
     cargo run -- \
     --include-skipped \
+    --include-passed \
     --report-title "A simple test report" \
     "{{test_reports_pattern}}"
 
