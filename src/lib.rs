@@ -175,6 +175,31 @@ mod tests {
 
     #[test]
     fn list_should_be_ordered_based_on_status() {
-        todo!()
+        let mut test_results = vec![
+            TestResult::builder()
+                .with_status(TestStatus::Skipped)
+                .build(),
+            TestResult::builder()
+                .with_status(TestStatus::Passed)
+                .build(),
+            TestResult::builder()
+                .with_status(TestStatus::Failed)
+                .build(),
+        ];
+
+        test_results.sort_by(|a, b| a.status.cmp(&b.status));
+
+        assert!(matches!(
+            test_results.first().unwrap().status,
+            TestStatus::Failed
+        ),);
+        assert!(matches!(
+            test_results.get(1).unwrap().status,
+            TestStatus::Skipped
+        ),);
+        assert!(matches!(
+            test_results.get(2).unwrap().status,
+            TestStatus::Passed
+        ),);
     }
 }
