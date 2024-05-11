@@ -120,36 +120,61 @@ impl MarkdownTestResult for TestResult {
 
 #[cfg(test)]
 mod tests {
-    use crate::{MarkdownTestResult, TestResult};
+    use crate::{MarkdownTestResult, TestResult, TestStatus};
     use test_case::test_case;
 
     #[test_case(TestResult {
         name: "SomeTest".to_string(),
         suite_name: Some("A test suite".to_string()),
         execution_time: Some(2.4),
-        status: crate::TestStatus::Failed,
+        status: TestStatus::Failed,
         failure_message: Some("A timeout occurred".to_string()),
     }, "❌ _SomeTest_ *failed* (`2.4s`): ```A timeout occurred```" ; "test failed")]
     #[test_case(TestResult {
         name: "AnotherTest".to_string(),
         suite_name: Some("A test suite".to_string()),
         execution_time: None,
-        status: crate::TestStatus::Skipped,
+        status: TestStatus::Skipped,
         failure_message: None,
     }, "⏭️ _AnotherTest_ was *skipped*"; "test skipped")]
     #[test_case(TestResult {
         name: "PassedTest".to_string(),
         suite_name: Some("A test suite".to_string()),
         execution_time: Some(2.4),
-        status: crate::TestStatus::Passed,
+        status: TestStatus::Passed,
         failure_message: None,
     }, "✅ _PassedTest_ *passed* (`2.4s`)" ; "test passed")]
-    fn should_convert_to_markdown_test_message(
+    fn trait_should_convert_to_markdown_test_message(
         test_result: TestResult,
         expected_markdown_message: &str,
     ) {
         let actual_markdown_message = test_result.to_string();
 
         assert_eq!(actual_markdown_message, expected_markdown_message);
+    }
+
+    #[test]
+    fn builder_should_build_a_test_result() {
+        let t = TestResult::builder()
+            .with_name("a test name".to_string())
+            .with_execution_time(1.2)
+            .with_status(TestStatus::Failed)
+            .with_failure_message("something bad happened".to_string())
+            .with_suite_name("a suite name".to_string())
+            .build();
+
+        assert_eq!(t.name, "a test name");
+        assert_eq!(t.execution_time, Some(1.2));
+        assert!(matches!(t.status, TestStatus::Failed,));
+        assert_eq!(
+            t.failure_message,
+            Some("something bad happened".to_string())
+        );
+        assert_eq!(t.suite_name, Some("a suite name".to_string()));
+    }
+
+    #[test]
+    fn list_should_be_ordered_based_on_status(){
+        todo!()
     }
 }
