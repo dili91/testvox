@@ -174,7 +174,7 @@ mod tests {
     }
 
     #[test]
-    fn list_should_be_ordered_based_on_status(){
+    fn list_should_be_ordered_based_on_status() {
         todo!()
     }
 }

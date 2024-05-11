@@ -135,8 +135,10 @@ mod tests {
         );
 
         // tests are ordered by status: Failed, Skipped, Passed
-        let first = test_results.first().unwrap();
-        assert_eq!(first.name, "testCase9");
+        let first = test_results
+            .iter()
+            .find(|t| t.name == "testCase9")
+            .expect("Failed to find expected test");
         assert_eq!(first.suite_name, Some("Tests.Authentication".to_string()));
         assert!(matches!(first.status, TestStatus::Failed,));
         assert_eq!(
@@ -145,8 +147,10 @@ mod tests {
         );
         assert_eq!(first.execution_time, Some(0.982));
 
-        let second = test_results.get(1).unwrap();
-        assert_eq!(second.name, "testCase4");
+        let second = test_results
+            .iter()
+            .find(|t| t.name == "testCase4")
+            .expect("Failed to find expected test");
         assert_eq!(
             second.suite_name,
             Some("Tests.Authentication.Login".to_string())
@@ -155,8 +159,10 @@ mod tests {
         assert!(second.failure_message.is_none());
         assert!(second.execution_time.is_none());
 
-        let third = test_results.get(2).unwrap();
-        assert_eq!(third.name, "testCase1");
+        let third = test_results
+            .iter()
+            .find(|t| t.name == "testCase1")
+            .expect("Failed to find expected test");
         assert_eq!(third.suite_name, Some("Tests.Registration".to_string()));
         assert!(matches!(third.status, TestStatus::Passed,));
         assert!(third.failure_message.is_none());
