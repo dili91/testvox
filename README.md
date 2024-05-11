@@ -23,7 +23,7 @@ Currently, only Github Actions are supported.
   - [x] Remove code that panics
   - [ ] improve test coverage
   - [ ] Review methods visibility
-  - [ ] Deterministic ordering: failed, skipped, passed
+  - [x] Deterministic ordering: failed, skipped, passed
   - [ ] Add link to test failing on CI
   - [ ] Improve CI build, linting, ecc
   - [ ] verify extendibility 

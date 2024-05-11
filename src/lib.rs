@@ -121,52 +121,35 @@ impl MarkdownTestResult for TestResult {
 #[cfg(test)]
 mod tests {
     use crate::{MarkdownTestResult, TestResult};
+    use test_case::test_case;
 
-    #[test]
-    fn should_convert_passed_test_result_to_markdown_test_message() {
-        let test_result = TestResult {
-            name: "SomeTest".to_string(),
-            suite_name: Some("A test suite".to_string()),
-            execution_time: Some(2.4),
-            status: crate::TestStatus::Passed,
-            failure_message: None,
-        };
+    #[test_case(TestResult {
+        name: "SomeTest".to_string(),
+        suite_name: Some("A test suite".to_string()),
+        execution_time: Some(2.4),
+        status: crate::TestStatus::Failed,
+        failure_message: Some("A timeout occurred".to_string()),
+    }, "❌ _SomeTest_ *failed* (`2.4s`): ```A timeout occurred```" ; "test failed")]
+    #[test_case(TestResult {
+        name: "AnotherTest".to_string(),
+        suite_name: Some("A test suite".to_string()),
+        execution_time: None,
+        status: crate::TestStatus::Skipped,
+        failure_message: None,
+    }, "⏭️ _AnotherTest_ was *skipped*"; "test skipped")]
+    #[test_case(TestResult {
+        name: "PassedTest".to_string(),
+        suite_name: Some("A test suite".to_string()),
+        execution_time: Some(2.4),
+        status: crate::TestStatus::Passed,
+        failure_message: None,
+    }, "✅ _PassedTest_ *passed* (`2.4s`)" ; "test passed")]
+    fn should_convert_to_markdown_test_message(
+        test_result: TestResult,
+        expected_markdown_message: &str,
+    ) {
+        let actual_markdown_message = test_result.to_string();
 
-        let markdown_message = test_result.to_string();
-
-        assert_eq!(markdown_message, "✅ _SomeTest_ *passed* (`2.4s`)");
-    }
-
-    #[test]
-    fn should_convert_skipped_test_result_to_markdown_test_message() {
-        let test_result = TestResult {
-            name: "SomeTest".to_string(),
-            suite_name: Some("A test suite".to_string()),
-            execution_time: Some(2.4),
-            status: crate::TestStatus::Skipped,
-            failure_message: None,
-        };
-
-        let markdown_message = test_result.to_string();
-
-        assert_eq!(markdown_message, "⏭️ _SomeTest_ was *skipped*");
-    }
-
-    #[test]
-    fn should_convert_failed_test_result_to_markdown_test_message() {
-        let test_result = TestResult {
-            name: "SomeTest".to_string(),
-            suite_name: Some("A test suite".to_string()),
-            execution_time: Some(2.4),
-            status: crate::TestStatus::Failed,
-            failure_message: Some("A timeout occurred".to_string()),
-        };
-
-        let markdown_message = test_result.to_string();
-
-        assert_eq!(
-            markdown_message,
-            "❌ _SomeTest_ *failed* (`2.4s`): ```A timeout occurred```"
-        );
+        assert_eq!(actual_markdown_message, expected_markdown_message);
     }
 }

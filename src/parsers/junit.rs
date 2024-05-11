@@ -135,7 +135,7 @@ mod tests {
         );
 
         // tests are ordered by status: Failed, Skipped, Passed
-        let first = test_results.get(0).unwrap();
+        let first = test_results.first().unwrap();
         assert_eq!(first.name, "testCase9");
         assert_eq!(first.suite_name, Some("Tests.Authentication".to_string()));
         assert!(matches!(first.status, TestStatus::Failed,));
