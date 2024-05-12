@@ -2,6 +2,7 @@ alias db    := docker-build
 alias dr    := docker-run
 alias b     := build
 alias r     := run
+alias f     := format
 alias t     := test
 
 default_test_reports_pattern := "./test-results/**/*.xml"
@@ -16,12 +17,15 @@ docker-run test_reports_pattern=default_test_reports_pattern:
 build:
     cargo build
 
+format:
+    cargo fmt
+
+test: 
+    cargo test
+
 run test_reports_pattern=default_test_reports_pattern:
     cargo run -- \
     --include-skipped \
     --include-passed \
     --report-title "A simple test report" \
     "{{test_reports_pattern}}"
-
-test: 
-    cargo nextest run
