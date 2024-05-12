@@ -2,6 +2,8 @@ use serde::Serialize;
 
 use crate::{MarkdownTestResult, TestResult};
 
+use super::PrettyPrint;
+
 #[derive(Serialize)]
 pub struct SlackReport {
     pub blocks: Vec<Block>,
@@ -10,6 +12,12 @@ pub struct SlackReport {
 impl SlackReport {
     pub fn builder() -> SlackReportBuilder {
         SlackReportBuilder::default()
+    }
+}
+
+impl PrettyPrint for SlackReport {
+    fn to_string_pretty(&self) -> String {
+        serde_json::to_string_pretty(&self).expect("unable to serialize report to JSON")
     }
 }
 
@@ -68,7 +76,7 @@ impl SlackReportBuilder {
                     Block::Divider,
                     Block::Section {
                         text: MarkdownText {
-                            text: t.to_string(),
+                            text: t.to_markdown_string(),
                         },
                     },
                 ]
@@ -88,7 +96,7 @@ impl From<TestResult> for Vec<Block> {
             Block::Divider,
             Block::Section {
                 text: MarkdownText {
-                    text: test_result.to_string(),
+                    text: test_result.to_markdown_string(),
                 },
             },
         ]
@@ -97,8 +105,99 @@ impl From<TestResult> for Vec<Block> {
 
 #[cfg(test)]
 mod tests {
+    use crate::{reporters::PrettyPrint, MarkdownTestResult, TestResult};
+    use assert_json::assert_json;
+
+    use super::SlackReport;
+
+    #[test]
+    fn should_create_report_in_slack_format_empty() {
+        let title = "An empty Slack report";
+        let report = SlackReport::builder().with_title(title.to_string()).build();
+
+        assert_json!(report.to_string_pretty().as_str(), {
+                "blocks": [{
+                    "type": "header",
+                    "text": {
+                        "emoji": true,
+                        "text": title,
+                        "type": "plain_text"
+                    }
+                }]
+            }
+        );
+    }
+
     #[test]
     fn should_create_report_in_slack_format() {
-        todo!()
+        let title = "A Slack report";
+        let test_failed = TestResult::builder()
+            .with_name("a test failed".to_string())
+            .with_status(crate::TestStatus::Failed)
+            .with_failure_message("A failure".to_string())
+            .with_execution_time(1.2)
+            .build();
+        let test_skipped = TestResult::builder()
+            .with_name("a test skipped".to_string())
+            .with_status(crate::TestStatus::Skipped)
+            .build();
+        let test_passed = TestResult::builder()
+            .with_name("a test passed".to_string())
+            .with_status(crate::TestStatus::Passed)
+            .with_execution_time(3.3)
+            .build();
+
+        let report = SlackReport::builder()
+            .with_title(title.to_string())
+            .with_test_results(vec![
+                test_failed.clone(),
+                test_passed.clone(),
+                test_skipped.clone(),
+            ])
+            .build();
+
+        assert_json!(report.to_string_pretty().as_str(), {
+                "blocks": [
+                    {
+                        "type": "header",
+                        "text": {
+                            "emoji": true,
+                            "text": title,
+                            "type": "plain_text"
+                        }
+                    },
+                    {
+                        "type":"divider"
+                    },
+                    {
+                        "type":"section",
+                        "text": {
+                            "text": test_failed.to_markdown_string(),
+                            "type": "mrkdwn"
+                        }
+                    },
+                    {
+                        "type":"divider"
+                    },
+                    {
+                        "type":"section",
+                        "text": {
+                            "text": test_skipped.to_markdown_string(),
+                            "type": "mrkdwn"
+                        }
+                    },
+                    {
+                        "type":"divider"
+                    },
+                    {
+                        "type":"section",
+                        "text": {
+                            "text": test_passed.to_markdown_string(),
+                            "type": "mrkdwn"
+                        }
+                    }
+                ]
+            }
+        );
     }
 }

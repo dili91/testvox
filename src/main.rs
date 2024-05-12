@@ -5,7 +5,7 @@ use clap::Parser;
 use glob::glob;
 use testvox::{
     parsers::{junit::JunitTestParser, TestParser},
-    reporters::slack::SlackReport,
+    reporters::{slack::SlackReport, PrettyPrint},
     TestResult, TestStatus,
 };
 
@@ -72,10 +72,7 @@ fn main() {
         .with_test_results(test_results)
         .build();
 
-    println!(
-        "{}",
-        serde_json::to_string_pretty(&report).expect("unable to serialize to JSON") // TODO: pretty printing is parser-specific. Move it there
-    )
+    println!("{}", report.to_string_pretty())
 }
 
 fn detect_parser(test_file: PathBuf) -> Result<Box<dyn TestParser>> {

@@ -21,7 +21,7 @@ Currently, only Github Actions are supported.
 # Todo
 ## `v1.0.0`
   - [x] Remove code that panics
-  - [ ] improve test coverage
+  - [x] improve test coverage
   - [ ] Review methods visibility
   - [x] Deterministic ordering: failed, skipped, passed
   - [ ] Add link to test failing on CI

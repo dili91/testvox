@@ -3,6 +3,7 @@ use std::cmp::Ordering;
 pub mod parsers;
 pub mod reporters;
 
+#[derive(Clone)]
 pub struct TestResult {
     pub name: String,
     pub suite_name: Option<String>,
@@ -92,11 +93,11 @@ impl TestResultBuilder {
 }
 
 pub trait MarkdownTestResult {
-    fn to_string(&self) -> String;
+    fn to_markdown_string(&self) -> String;
 }
 
 impl MarkdownTestResult for TestResult {
-    fn to_string(&self) -> String {
+    fn to_markdown_string(&self) -> String {
         match self.status {
             TestStatus::Passed => {
                 format!(
@@ -148,7 +149,7 @@ mod tests {
         test_result: TestResult,
         expected_markdown_message: &str,
     ) {
-        let actual_markdown_message = test_result.to_string();
+        let actual_markdown_message = test_result.to_markdown_string();
 
         assert_eq!(actual_markdown_message, expected_markdown_message);
     }
