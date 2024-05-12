@@ -19,7 +19,7 @@ Currently, only Github Actions are supported.
 
 
 # Todo
-## `v1.0.0`
+## `v0.1.0`
   - [x] Remove code that panics
   - [x] improve test coverage
   - [ ] Review methods visibility
