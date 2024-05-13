@@ -42,12 +42,14 @@ pub struct MarkdownText {
     pub text: String,
 }
 
+//TODO: turn this into generic struct and move away?
 #[derive(Default)]
 pub struct SlackReportBuilder {
     title: String,
     test_results: Vec<TestResult>,
 }
 
+//TODO: can this builder made generic and have a generic type to represent the report type?
 impl SlackReportBuilder {
     pub fn with_title(mut self, title: String) -> SlackReportBuilder {
         self.title = title;
