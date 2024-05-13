@@ -27,6 +27,7 @@ struct CliArgs {
     test_reports_pattern: Vec<String>,
 }
 
+//TODO: minimal CI to build/audit/format/test etc
 fn main() {
     // Parse CLI arguments
     let cli_args = CliArgs::parse();
