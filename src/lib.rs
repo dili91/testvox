@@ -1,4 +1,4 @@
-use std::cmp::Ordering;
+use std::{cmp::Ordering, fmt};
 
 pub mod parsers;
 pub mod reporters;
@@ -18,12 +18,18 @@ impl TestResult {
     }
 }
 
-#[derive(PartialEq, Eq, Default, Clone)]
+#[derive(PartialEq, Eq, Default, Clone, Debug)]
 pub enum TestStatus {
     #[default]
     Failed,
     Passed,
     Skipped,
+}
+
+impl fmt::Display for TestStatus {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{:?}", self)
+    }
 }
 
 impl Ord for TestStatus {
@@ -202,5 +208,15 @@ mod tests {
             test_results.get(2).unwrap().status,
             TestStatus::Passed
         ),);
+    }
+
+    #[test_case(TestStatus::Failed, "Failed")]
+    #[test_case(TestStatus::Skipped, "Skipped")]
+    #[test_case(TestStatus::Passed, "Passed")]
+    fn test_status_should_yield_string_representation(
+        test_status: TestStatus,
+        expected_string: &str,
+    ) {
+        assert_eq!(test_status.to_string(), expected_string)
     }
 }

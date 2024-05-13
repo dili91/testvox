@@ -2,23 +2,11 @@ use serde::Serialize;
 
 use crate::{MarkdownTestResult, TestResult};
 
-use super::PrettyPrint;
+use super::{PrettyPrint, ReportBuilder};
 
 #[derive(Serialize)]
 pub struct SlackReport {
     pub blocks: Vec<Block>,
-}
-
-impl SlackReport {
-    pub fn builder() -> SlackReportBuilder {
-        SlackReportBuilder::default()
-    }
-}
-
-impl PrettyPrint for SlackReport {
-    fn to_string_pretty(&self) -> String {
-        serde_json::to_string_pretty(&self).expect("unable to serialize report to JSON")
-    }
 }
 
 #[derive(Serialize)]
@@ -42,48 +30,46 @@ pub struct MarkdownText {
     pub text: String,
 }
 
-//TODO: turn this into generic struct and move away?
-#[derive(Default)]
-pub struct SlackReportBuilder {
-    title: String,
-    test_results: Vec<TestResult>,
+impl PrettyPrint for SlackReport {
+    fn to_string_pretty(&self) -> String {
+        serde_json::to_string_pretty(&self).expect("unable to serialize report to JSON")
+    }
 }
 
-//TODO: can this builder made generic and have a generic type to represent the report type?
-impl SlackReportBuilder {
-    pub fn with_title(mut self, title: String) -> SlackReportBuilder {
-        self.title = title;
-        self
-    }
-
-    pub fn with_test_results(mut self, test_results: Vec<TestResult>) -> SlackReportBuilder {
-        self.test_results = test_results;
-        self.test_results.sort_by(|a, b| a.status.cmp(&b.status));
-        self
-    }
-
-    pub fn build(self) -> SlackReport {
+impl From<ReportBuilder> for SlackReport {
+    fn from(value: ReportBuilder) -> Self {
         let header_block = Block::Header {
             text: PlainText {
-                text: self.title,
+                text: value.title,
                 emoji: true,
             },
         };
 
-        let mut section_blocks: Vec<Block> = self
-            .test_results
-            .into_iter()
-            .flat_map(|t| {
-                vec![
-                    Block::Divider,
-                    Block::Section {
-                        text: MarkdownText {
-                            text: t.to_markdown_string(),
-                        },
+        let mut section_blocks: Vec<Block> = if value.test_results.is_empty() {
+            vec![
+                Block::Divider,
+                Block::Section {
+                    text: MarkdownText {
+                        text: "⚠️ unable to find test results".to_string(),
                     },
-                ]
-            })
-            .collect();
+                },
+            ]
+        } else {
+            value
+                .test_results
+                .into_iter()
+                .flat_map(|t| {
+                    vec![
+                        Block::Divider,
+                        Block::Section {
+                            text: MarkdownText {
+                                text: t.to_markdown_string(),
+                            },
+                        },
+                    ]
+                })
+                .collect()
+        };
 
         let mut blocks = vec![header_block];
         blocks.append(&mut section_blocks);
@@ -107,7 +93,10 @@ impl From<TestResult> for Vec<Block> {
 
 #[cfg(test)]
 mod tests {
-    use crate::{reporters::PrettyPrint, MarkdownTestResult, TestResult};
+    use crate::{
+        reporters::{PrettyPrint, ReportBuilder},
+        MarkdownTestResult, TestResult,
+    };
     use assert_json::assert_json;
 
     use super::SlackReport;
@@ -115,17 +104,31 @@ mod tests {
     #[test]
     fn should_create_report_in_slack_format_empty() {
         let title = "An empty Slack report";
-        let report = SlackReport::builder().with_title(title.to_string()).build();
+        let report = ReportBuilder::new()
+            .with_title(title.to_string())
+            .build::<SlackReport>();
 
         assert_json!(report.to_string_pretty().as_str(), {
-                "blocks": [{
-                    "type": "header",
-                    "text": {
-                        "emoji": true,
-                        "text": title,
-                        "type": "plain_text"
-                    }
-                }]
+                "blocks": [
+                    {
+                        "type": "header",
+                        "text": {
+                            "emoji": true,
+                            "text": title,
+                            "type": "plain_text"
+                        }
+                    },
+                    {
+                        "type":"divider"
+                    },
+                    {
+                        "type":"section",
+                        "text": {
+                            "text": "⚠️ unable to find test results",
+                            "type": "mrkdwn"
+                        }
+                    },
+                ]
             }
         );
     }
@@ -149,7 +152,7 @@ mod tests {
             .with_execution_time(3.3)
             .build();
 
-        let report = SlackReport::builder()
+        let report: SlackReport = ReportBuilder::new()
             .with_title(title.to_string())
             .with_test_results(vec![
                 test_failed.clone(),

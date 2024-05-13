@@ -24,14 +24,14 @@ Currently, only Github Actions are supported.
   - [x] improve test coverage
   - [ ] Review methods visibility
   - [x] Deterministic ordering: failed, skipped, passed
-  - [ ] Add link to test failing on CI
   - [ ] Improve CI build, linting, ecc
   - [ ] verify extendibility 
   - [x] Support setting passed and/or failed via flag
-  - [ ] Test with real project
+  - [x] Test with real project
   - [ ] Review License, contributing (PRs and Issues)
 
-## `Next releases`
+## `Next releases
+  - [ ] Add link to test failing on CI
   - [ ] Support other test frameworks: js, .net...
     - [ ] Test reports detection
   - [ ] Supports defining multiple reports patterns via GH action

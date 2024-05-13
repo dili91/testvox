@@ -5,7 +5,7 @@ use clap::Parser;
 use glob::glob;
 use testvox::{
     parsers::{junit::JunitTestParser, TestParser},
-    reporters::{slack::SlackReport, PrettyPrint},
+    reporters::{slack::SlackReport, PrettyPrint, ReportBuilder},
     TestResult, TestStatus,
 };
 
@@ -66,11 +66,10 @@ fn main() {
         })
         .collect();
 
-    // Build and print the final report
-    let report = SlackReport::builder()
+    let report = ReportBuilder::new()
         .with_title(cli_args.report_title)
         .with_test_results(test_results)
-        .build();
+        .build::<SlackReport>();
 
     println!("{}", report.to_string_pretty())
 }
@@ -80,6 +79,7 @@ fn detect_parser(test_file: PathBuf) -> Result<Box<dyn TestParser>> {
     Ok(Box::new(JunitTestParser::from(content)))
 }
 
+//TODO: move elsewhere
 fn is_reportable(test_result: &TestResult, include_skipped: bool, include_passed: bool) -> bool {
     test_result.status == TestStatus::Failed
         || (test_result.status == TestStatus::Skipped && include_skipped)
