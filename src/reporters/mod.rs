@@ -38,38 +38,9 @@ impl ReportBuilder {
 
 #[cfg(test)]
 mod tests {
-    use serde::Serialize;
-
-    use crate::TestResult;
-
     use super::{PrettyPrint, ReportBuilder};
-
-    #[derive(Serialize)]
-    struct CustomReport {
-        report_title: String,
-        test_results: Vec<(String, String)>,
-    }
-
-    impl From<ReportBuilder> for CustomReport {
-        fn from(value: ReportBuilder) -> Self {
-            let test_results: Vec<(String, String)> = value
-                .test_results
-                .into_iter()
-                .map(|tr| (tr.name, tr.status.to_string()))
-                .collect();
-
-            Self {
-                report_title: value.title,
-                test_results,
-            }
-        }
-    }
-
-    impl PrettyPrint for CustomReport {
-        fn to_string_pretty(&self) -> String {
-            format!("{}={:?}", self.report_title, self.test_results)
-        }
-    }
+    use crate::TestResult;
+    use serde::Serialize;
 
     #[test]
     fn should_build_a_default_report_builder() {
@@ -103,5 +74,32 @@ mod tests {
         assert_eq!(
             report.to_string_pretty(),
             "a-report=[(\"a-test-failed\", \"Failed\"), (\"a-test-skipped\", \"Skipped\"), (\"a-test-passed\", \"Passed\")]");
+    }
+
+    #[derive(Serialize)]
+    struct CustomReport {
+        report_title: String,
+        test_results: Vec<(String, String)>,
+    }
+
+    impl From<ReportBuilder> for CustomReport {
+        fn from(value: ReportBuilder) -> Self {
+            let test_results: Vec<(String, String)> = value
+                .test_results
+                .into_iter()
+                .map(|tr| (tr.name, tr.status.to_string()))
+                .collect();
+
+            Self {
+                report_title: value.title,
+                test_results,
+            }
+        }
+    }
+
+    impl PrettyPrint for CustomReport {
+        fn to_string_pretty(&self) -> String {
+            format!("{}={:?}", self.report_title, self.test_results)
+        }
     }
 }
