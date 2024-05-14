@@ -82,7 +82,6 @@ mod tests {
 
     #[test]
     fn should_parse_junit_test_report_into_test_results() {
-        // Arrange
         let junit_test_results_contents = indoc! {"
             <?xml version=\"1.0\" encoding=\"UTF-8\"?>
             <testsuites time=\"15.682687\">
@@ -102,15 +101,12 @@ mod tests {
                     </testcase>
                 </testsuite>
             </testsuites>"};
-
         let junit_parser = JunitTestParser::from(junit_test_results_contents.to_string());
 
-        // Act
         let test_results = junit_parser
             .parse()
             .expect("Unable to parse test results content");
 
-        // Assert
         assert_eq!(test_results.len(), 3);
         assert_eq!(
             test_results

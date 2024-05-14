@@ -18,7 +18,7 @@ impl TestResult {
     }
 }
 
-#[derive(PartialEq, Eq, Default, Clone, Debug)]
+#[derive(PartialEq, Eq, Hash, Default, Clone, Debug)]
 pub enum TestStatus {
     #[default]
     Failed,

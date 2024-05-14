@@ -1,4 +1,6 @@
-use crate::TestResult;
+use std::collections::HashSet;
+
+use crate::{TestResult, TestStatus};
 
 pub mod slack;
 
@@ -6,6 +8,7 @@ pub mod slack;
 pub struct ReportBuilder {
     title: String,
     test_results: Vec<TestResult>,
+    reportable_statuses: HashSet<TestStatus>,
 }
 
 pub trait PrettyPrint {
@@ -14,7 +17,9 @@ pub trait PrettyPrint {
 
 impl ReportBuilder {
     pub fn new() -> ReportBuilder {
-        ReportBuilder::default()
+        let mut rb = ReportBuilder::default();
+        rb.reportable_statuses.insert(TestStatus::Failed);
+        rb
     }
 
     pub fn with_title(mut self, title: String) -> ReportBuilder {
@@ -24,14 +29,27 @@ impl ReportBuilder {
 
     pub fn with_test_results(mut self, test_results: Vec<TestResult>) -> ReportBuilder {
         self.test_results = test_results;
-        self.test_results.sort_by(|a, b| a.status.cmp(&b.status));
         self
     }
 
-    pub fn build<T>(self) -> T
+    pub fn include_passed(mut self) -> ReportBuilder {
+        self.reportable_statuses.insert(TestStatus::Passed);
+        self
+    }
+
+    pub fn include_skipped(mut self) -> ReportBuilder {
+        self.reportable_statuses.insert(TestStatus::Skipped);
+        self
+    }
+
+    pub fn build<T>(mut self) -> T
     where
         T: From<ReportBuilder> + PrettyPrint,
     {
+        self.test_results
+            .retain(|t| self.reportable_statuses.contains(&t.status));
+        self.test_results.sort_by(|a, b| a.status.cmp(&b.status));
+
         Into::into(self)
     }
 }
@@ -39,7 +57,7 @@ impl ReportBuilder {
 #[cfg(test)]
 mod tests {
     use super::{PrettyPrint, ReportBuilder};
-    use crate::TestResult;
+    use crate::{TestResult, TestStatus};
     use serde::Serialize;
 
     #[test]
@@ -48,6 +66,8 @@ mod tests {
 
         assert_eq!(rb.title, "");
         assert!(rb.test_results.is_empty());
+        assert_eq!(rb.reportable_statuses.len(), 1);
+        assert!(rb.reportable_statuses.contains(&TestStatus::Failed))
     }
 
     #[test]
@@ -69,6 +89,8 @@ mod tests {
         let report = ReportBuilder::new()
             .with_title("a-report".to_string())
             .with_test_results(test_results)
+            .include_passed()
+            .include_skipped()
             .build::<CustomReport>();
 
         assert_eq!(

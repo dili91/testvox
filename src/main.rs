@@ -6,7 +6,7 @@ use glob::glob;
 use testvox::{
     parsers::{junit::JunitTestParser, TestParser},
     reporters::{slack::SlackReport, PrettyPrint, ReportBuilder},
-    TestResult, TestStatus,
+    TestResult,
 };
 
 #[derive(Parser)]
@@ -58,21 +58,24 @@ fn main() {
         })
         .filter_map(|test_results| test_results.ok())
         .flatten()
-        .filter(|test_result| {
-            is_reportable(
-                test_result,
-                cli_args.include_skipped,
-                cli_args.include_passed,
-            )
-        })
         .collect();
 
-    let report = ReportBuilder::new()
+    let mut report_builder = ReportBuilder::new()
         .with_title(cli_args.report_title)
-        .with_test_results(test_results)
-        .build::<SlackReport>();
+        .with_test_results(test_results);
 
-    println!("{}", report.to_string_pretty())
+    if cli_args.include_passed {
+        report_builder = report_builder.include_passed();
+    }
+
+    if cli_args.include_skipped {
+        report_builder = report_builder.include_skipped();
+    }
+
+    println!(
+        "{}",
+        report_builder.build::<SlackReport>().to_string_pretty()
+    )
 }
 
 fn detect_parser(test_file: PathBuf) -> Result<Box<dyn TestParser>> {
@@ -80,9 +83,9 @@ fn detect_parser(test_file: PathBuf) -> Result<Box<dyn TestParser>> {
     Ok(Box::new(JunitTestParser::from(content)))
 }
 
-//TODO: move elsewhere
-fn is_reportable(test_result: &TestResult, include_skipped: bool, include_passed: bool) -> bool {
-    test_result.status == TestStatus::Failed
-        || (test_result.status == TestStatus::Skipped && include_skipped)
-        || (test_result.status == TestStatus::Passed && include_passed)
+mod tests {
+    #[test]
+    fn should_create_a_slack_report_from_junit_results() {
+        todo!()
+    }
 }

@@ -154,6 +154,8 @@ mod tests {
 
         let report: SlackReport = ReportBuilder::new()
             .with_title(title.to_string())
+            .include_passed()
+            .include_skipped()
             .with_test_results(vec![
                 test_failed.clone(),
                 test_passed.clone(),
