@@ -4,7 +4,9 @@ use anyhow::Result;
 use clap::Parser;
 use glob::glob;
 use testvox::{
-    models::test_result::TestResult, parsers::{junit::JunitTestParser, TestParser}, reporters::{slack::SlackReport, PrettyPrint, ReportBuilder}
+    models::test_result::TestResult,
+    parsers::{junit::JunitTestParser, TestParser},
+    reporters::{slack::SlackReport, PrettyPrint, ReportBuilder},
 };
 
 #[derive(Parser)]

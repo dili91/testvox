@@ -1,12 +1,10 @@
 //TODO: documentation
 
+pub mod models;
 pub mod parsers;
 pub mod reporters;
-pub mod models;
 
-pub fn create_test_report(){
-
-}
+pub fn create_test_report() {}
 
 mod tests {
     #[test]

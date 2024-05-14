@@ -2,7 +2,6 @@ use std::collections::HashSet;
 
 use crate::models::{test_result::TestResult, test_status::TestStatus};
 
-
 pub mod slack;
 
 #[derive(Default)]

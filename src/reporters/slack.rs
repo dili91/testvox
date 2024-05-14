@@ -1,5 +1,5 @@
-use serde::Serialize;
 use crate::models::test_result::TestResult;
+use serde::Serialize;
 
 use super::{PrettyPrint, ReportBuilder};
 
@@ -93,7 +93,8 @@ impl From<TestResult> for Vec<Block> {
 #[cfg(test)]
 mod tests {
     use crate::{
-        models::{test_result::TestResult, test_status::TestStatus}, reporters::{PrettyPrint, ReportBuilder}
+        models::{test_result::TestResult, test_status::TestStatus},
+        reporters::{PrettyPrint, ReportBuilder},
     };
     use assert_json::assert_json;
 
