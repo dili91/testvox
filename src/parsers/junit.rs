@@ -1,7 +1,8 @@
-use crate::{TestResult, TestStatus};
 use anyhow::Result;
 use core::f32;
 use roxmltree::{Document, Node};
+
+use crate::models::{test_result::TestResult, test_status::TestStatus};
 
 use super::TestParser;
 
@@ -77,7 +78,7 @@ impl TestParser for JunitTestParser {
 #[cfg(test)]
 mod tests {
     use super::JunitTestParser;
-    use crate::{parsers::TestParser, TestStatus};
+    use crate::{models::test_status::TestStatus, parsers::TestParser};
     use indoc::indoc;
 
     #[test]

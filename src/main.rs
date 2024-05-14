@@ -4,9 +4,7 @@ use anyhow::Result;
 use clap::Parser;
 use glob::glob;
 use testvox::{
-    parsers::{junit::JunitTestParser, TestParser},
-    reporters::{slack::SlackReport, PrettyPrint, ReportBuilder},
-    TestResult,
+    models::test_result::TestResult, parsers::{junit::JunitTestParser, TestParser}, reporters::{slack::SlackReport, PrettyPrint, ReportBuilder}
 };
 
 #[derive(Parser)]
@@ -31,6 +29,8 @@ struct CliArgs {
 fn main() {
     // Parse CLI arguments
     let cli_args = CliArgs::parse();
+
+    //TODO: this should call the lib instead
 
     let test_results_files: Vec<PathBuf> = cli_args
         .test_reports_pattern
@@ -81,11 +81,4 @@ fn main() {
 fn detect_parser(test_file: PathBuf) -> Result<Box<dyn TestParser>> {
     let content = fs::read_to_string(test_file)?;
     Ok(Box::new(JunitTestParser::from(content)))
-}
-
-mod tests {
-    #[test]
-    fn should_create_a_slack_report_from_junit_results() {
-        todo!()
-    }
 }

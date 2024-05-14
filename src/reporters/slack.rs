@@ -1,6 +1,5 @@
 use serde::Serialize;
-
-use crate::{MarkdownTestResult, TestResult};
+use crate::models::test_result::TestResult;
 
 use super::{PrettyPrint, ReportBuilder};
 
@@ -94,8 +93,7 @@ impl From<TestResult> for Vec<Block> {
 #[cfg(test)]
 mod tests {
     use crate::{
-        reporters::{PrettyPrint, ReportBuilder},
-        MarkdownTestResult, TestResult,
+        models::{test_result::TestResult, test_status::TestStatus}, reporters::{PrettyPrint, ReportBuilder}
     };
     use assert_json::assert_json;
 
@@ -138,17 +136,17 @@ mod tests {
         let title = "A Slack report";
         let test_failed = TestResult::builder()
             .with_name("a test failed".to_string())
-            .with_status(crate::TestStatus::Failed)
+            .with_status(TestStatus::Failed)
             .with_failure_message("A failure".to_string())
             .with_execution_time(1.2)
             .build();
         let test_skipped = TestResult::builder()
             .with_name("a test skipped".to_string())
-            .with_status(crate::TestStatus::Skipped)
+            .with_status(TestStatus::Skipped)
             .build();
         let test_passed = TestResult::builder()
             .with_name("a test passed".to_string())
-            .with_status(crate::TestStatus::Passed)
+            .with_status(TestStatus::Passed)
             .with_execution_time(3.3)
             .build();
 

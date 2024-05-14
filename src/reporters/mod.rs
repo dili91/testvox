@@ -1,6 +1,7 @@
 use std::collections::HashSet;
 
-use crate::{TestResult, TestStatus};
+use crate::models::{test_result::TestResult, test_status::TestStatus};
+
 
 pub mod slack;
 
@@ -56,8 +57,9 @@ impl ReportBuilder {
 
 #[cfg(test)]
 mod tests {
+    use crate::models::{test_result::TestResult, test_status::TestStatus};
+
     use super::{PrettyPrint, ReportBuilder};
-    use crate::{TestResult, TestStatus};
     use serde::Serialize;
 
     #[test]
@@ -75,15 +77,15 @@ mod tests {
         let test_results: Vec<TestResult> = vec![
             TestResult::builder()
                 .with_name("a-test-passed".to_string())
-                .with_status(crate::TestStatus::Passed)
+                .with_status(TestStatus::Passed)
                 .build(),
             TestResult::builder()
                 .with_name("a-test-failed".to_string())
-                .with_status(crate::TestStatus::Failed)
+                .with_status(TestStatus::Failed)
                 .build(),
             TestResult::builder()
                 .with_name("a-test-skipped".to_string())
-                .with_status(crate::TestStatus::Skipped)
+                .with_status(TestStatus::Skipped)
                 .build(),
         ];
         let report = ReportBuilder::new()
