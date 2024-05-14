@@ -3,7 +3,7 @@
 # and leverages an ad-hoc positional notation for arguments
 
 if [ "$#" -ne 4 ]; then
-    printf "Invalid positional arguments.\nExpected: \$include_skipped \$include_passed \$report_title \$report_patterns" >&2
+    printf "Invalid positional arguments.\nExpected: \$include_skipped \$include_passed \$title \$reports_patterns" >&2
     exit 1
 fi
 
@@ -16,6 +16,6 @@ if [ "$2" = true ] ; then
 fi
 
 echo 'REPORT<<EOF' >> $GITHUB_OUTPUT
-testvox $OPTS --report-title "$3" "$4" >> $GITHUB_OUTPUT
+testvox $OPTS --title "$3" "$4" >> $GITHUB_OUTPUT
 echo 'EOF' >> $GITHUB_OUTPUT
 

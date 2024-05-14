@@ -1,7 +1,8 @@
-use crate::models::test_result::TestResult;
+use crate::models::{
+    test_report::{PrettyPrint, ReportBuilder},
+    test_result::TestResult,
+};
 use serde::Serialize;
-
-use super::{PrettyPrint, ReportBuilder};
 
 #[derive(Serialize)]
 pub struct SlackReport {
@@ -92,9 +93,10 @@ impl From<TestResult> for Vec<Block> {
 
 #[cfg(test)]
 mod tests {
-    use crate::{
-        models::{test_result::TestResult, test_status::TestStatus},
-        reporters::{PrettyPrint, ReportBuilder},
+    use crate::models::{
+        test_report::{PrettyPrint, ReportBuilder},
+        test_result::TestResult,
+        test_status::TestStatus,
     };
     use assert_json::assert_json;
 

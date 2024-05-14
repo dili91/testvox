@@ -5,7 +5,7 @@ inputs:
     description: 'The report title'
     required: true
     default: "${{ github.repository }} test report"
-  test_reports_pattern:
+  reports_pattern:
     description: 'Directory that contains raw test results'
     required: true
     default: "./build/test-results/*.xml"
@@ -17,7 +17,7 @@ inputs:
     default: false
 outputs:
   report:
-    description: 'A useful report'
+    description: 'A human readable test report'
 runs:
   using: 'docker'
   image: 'Dockerfile'
@@ -26,6 +26,6 @@ runs:
     - "${{ inputs.include_skipped}}"
     - "${{ inputs.include_passed}}"
     - "${{ inputs.title }}"
-    - "/github/workspace/${{inputs.test_reports_pattern}}"
+    - "/github/workspace/${{inputs.reports_pattern}}"
 
 

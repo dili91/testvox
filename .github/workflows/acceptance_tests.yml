@@ -2,17 +2,17 @@ on: [push]
 
 jobs:
   tests:
-    name: Junit test report generation
+    name: Acceptance Tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: ./ # Uses an action in the root directory
-        name: Generate report
+        name: Generate Slack report from Junit results
         id: generate_slack_report
         with:
           include_skipped: true
-          test_reports_pattern: "./test-results/**/*.xml"
-      - name: Send report
+          reports_pattern: "./test-results/**/*.xml"
+      - name: Send Slack report
         uses: slackapi/slack-github-action@v1.26.0
         with:
           payload: ${{steps.generate_slack_report.outputs.report}}

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites time="15.682687">
+    <testsuite name="Tests.Registration" time="6.605871">
+        <testcase name="It should create a new user" classname="Tests.Registration" time="2.113871" />
+        <testcase name="It should fail due to user already existing" classname="Tests.Registration" time="1.051" />
+    </testsuite>
+    <testsuite name="Tests.Authentication" time="9.076816">
+        <testsuite name="Tests.Authentication.Login" time="4.356">
+            <testcase name="It should login the user" classname="Tests.Authentication.Login" time="0.0">
+                <skipped/>
+            </testcase>
+            <testcase name="It should fail due to bad credentials" classname="Tests.Authentication.Login" time="0.781" />
+        </testsuite>
+        <testcase name="It should update the password" classname="Tests.Authentication" time="0.982">
+            <failure message="bad credentials" >
+                <!-- Call stack printed here -->
+            </failure>            
+        </testcase>
+    </testsuite>
+</testsuites>
