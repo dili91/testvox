@@ -28,7 +28,6 @@ struct CliArgs {
 }
 
 impl From<CliArgs> for CreateTestReportRequest {
-    //TODO: remove code that panics
     fn from(value: CliArgs) -> Self {
         let reports_contents: Vec<String> = value
             .reports_pattern
@@ -43,8 +42,7 @@ impl From<CliArgs> for CreateTestReportRequest {
             .collect();
 
         if reports_contents.is_empty() {
-            eprintln!("Cannot find test results file");
-            panic!();
+            panic!("Cannot find test results file");
         }
 
         Self {
