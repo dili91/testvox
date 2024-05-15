@@ -65,7 +65,7 @@ The Github action has the following requirements and defaults values:
 
 | Name            | Required     | Default                                |
 |-----------------|--------------|----------------------------------------|
-| title           | left-aligned | `${{ github.repository }} test report` |
+| title           | true         | `${{ github.repository }} test report` |
 | reports_pattern | Yes          | `./build/test-results/*.xml`           |
 | include_skipped | No           | false                                  |
 | include_passed  | No           | false                                  |
