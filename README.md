@@ -33,7 +33,7 @@ To use this as Github action it is enough to place the following step after your
   # ... Step that sends the report ...
 ```
 
-Below, and in the [acceptance-test.yaml](./.github/workflows/acceptance_tests.yml) file you can find a full example: 
+Below, and in the [acceptance-test.yml](./.github/workflows/acceptance_tests.yml) file you can find a full example: 
 
 ```yaml
 
