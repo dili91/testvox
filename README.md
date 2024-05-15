@@ -74,4 +74,8 @@ The Github action has the following requirements and defaults values:
 
 # Use as CLI
 
+#TODO
+
 # Use as library
+
+#TODO
