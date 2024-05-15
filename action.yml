@@ -1,4 +1,4 @@
-name: 'TestVox'
+name: 'TestVox - Turn test results into human readable reports'
 description: 'Turn test results into human readable reports'
 author: "Andrea Di Lisio"
 inputs:
