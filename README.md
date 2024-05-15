@@ -15,4 +15,58 @@ Currently, only Github Actions are supported.
 
 ## Use as Github action
 
-#TODO
+To use this as Github action it is enough to place the following step after your tests are generated and right before sending the message:
+```yaml
+  steps:
+
+  # ... Steps that generate test results ...
+
+  - uses: ./ # Uses an action in the root directory
+    name: Generate Slack report from Junit results
+    id: generate_slack_report
+    with:
+      include_skipped: true
+      reports_pattern: "./test-results/**/*.xml"
+
+  # ... Step that sends the report ...
+```
+
+Below, and in the [acceptance-test.yaml](./.github/workflows/acceptance_tests.yml) file you can find a full example: 
+
+```yaml
+
+on: [push]
+
+jobs:
+  tests:
+    name: Acceptance Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dili91/testvox@v0.1.0
+        name: Generate Slack report from Junit results
+        id: generate_slack_report
+        with:
+          include_skipped: true
+          reports_pattern: "./test-results/**/*.xml"
+      - name: Send Slack report
+        uses: slackapi/slack-github-action@v1.26.0
+        with:
+          payload: ${{steps.generate_slack_report.outputs.report}}
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+
+```
+
+### Default configuration
+
+The Github action has the following requirements and defaults values: 
+
+| Name            | Required     | Default                                |
+|-----------------|--------------|----------------------------------------|
+| title           | left-aligned | `${{ github.repository }} test report` |
+| reports_pattern | Yes          | `./build/test-results/*.xml`           |
+| include_skipped | No           | false                                  |
+| include_passed  | No           | false                                  |
+    
