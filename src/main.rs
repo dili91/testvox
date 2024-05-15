@@ -1,11 +1,9 @@
 use std::{fs, path::PathBuf};
-
 use clap::Parser;
 use glob::glob;
 
 use testvox::{
-    create_test_report, models::test_report::PrettyPrint, reporters::slack::SlackReport,
-    CreateTestReportRequest,
+    create_test_report, models::test_report::PrettyPrint, reporters::slack::SlackReport, CreateTestReportRequest
 };
 
 #[derive(Parser)]
@@ -53,6 +51,7 @@ impl From<CliArgs> for CreateTestReportRequest {
         }
     }
 }
+
 
 fn main() {
     let cli_args = CliArgs::parse();
