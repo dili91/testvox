@@ -9,6 +9,8 @@ The project simply deals with reports generation, it does not care about *sendin
 
 At the minute, it only helps turning test results in Junit format into Slack messages, but I'd like add more parsers and reporters in future.
 
+Its primary use case is probably within CI pipelines, although it can be used as CLI and as library as well. 
+
 # Use within CI
 
 Currently, only Github Actions are supported.
@@ -69,4 +71,7 @@ The Github action has the following requirements and defaults values:
 | reports_pattern | :white_check_mark: | `./build/test-results/*.xml`           |
 | include_skipped | :x:                | false                                  |
 | include_passed  | :x:                | false                                  |
-    
+
+# Use as CLI
+
+# Use as library
