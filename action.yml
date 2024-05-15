@@ -1,5 +1,6 @@
-name: 'testvox'
-description: 'Turn test results into useful reports'
+name: 'TestVox'
+description: 'Turn test results into human readable reports'
+author: "Andrea Di Lisio"
 inputs:
   title:
     description: 'The report title'
