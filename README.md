@@ -63,10 +63,10 @@ jobs:
 
 The Github action has the following requirements and defaults values: 
 
-| Name            | Required     | Default                                |
-|-----------------|--------------|----------------------------------------|
-| title           | true         | `${{ github.repository }} test report` |
-| reports_pattern | Yes          | `./build/test-results/*.xml`           |
-| include_skipped | No           | false                                  |
-| include_passed  | No           | false                                  |
+| Name            | Required           | Default                                |
+|-----------------|--------------------|----------------------------------------|
+| title           | :white_check_mark: | `${{ github.repository }} test report` |
+| reports_pattern | :white_check_mark: | `./build/test-results/*.xml`           |
+| include_skipped | :x:                | false                                  |
+| include_passed  | :x:                | false                                  |
     
