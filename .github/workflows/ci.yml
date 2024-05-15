@@ -1,4 +1,4 @@
-name: Build, Test, Publish
+name: Build, Test, Format
 
 on: [push, pull_request]
 
