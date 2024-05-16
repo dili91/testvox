@@ -23,8 +23,9 @@ To use this as Github action it is enough to place the following step after your
 
   # ... Steps that generate test results ...
 
-  - uses: ./ # Uses an action in the root directory
+  - uses: dili91/testvox@v0.1.0
     name: Generate Slack report from Junit results
+    # if: always() // might be needed, depending on your pipeline
     id: generate_slack_report
     with:
       include_skipped: true
@@ -47,6 +48,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: dili91/testvox@v0.1.0
         name: Generate Slack report from Junit results
+        # if: always() // might be needed, depending on your pipeline
         id: generate_slack_report
         with:
           include_skipped: true
