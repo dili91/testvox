@@ -6,6 +6,6 @@ use anyhow::Result;
 
 /// Generic trait describing all test parser's common methods
 pub trait TestParser {
-    /// Method that parse test results into a list of domain `TestResult` objects 
+    /// Method that parse test results into a list of domain `TestResult` objects
     fn parse(&self) -> Result<Vec<TestResult>>;
 }

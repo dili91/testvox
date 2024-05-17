@@ -57,9 +57,9 @@ fn detect_parser(report_content: String) -> Result<Box<dyn TestParser>> {
 /// A struct that describe the request for creating a report
 #[derive(Default)]
 pub struct CreateTestReportRequest {
-    /// the title that the generated report should have 
+    /// the title that the generated report should have
     pub title: String,
-    /// the contents of the test results to parse 
+    /// the contents of the test results to parse
     pub reports_contents: Vec<String>,
     /// whether to include passed tests in the generated reports
     pub include_passed: bool,
