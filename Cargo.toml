@@ -1,8 +1,14 @@
 [package]
 name = "testvox"
+description = "A library that turns test reports into human readable messages"
 version = "0.1.0"
 edition = "2021"
 authors = ["Andrea Di Lisio <andrea.dilisio91@gmail.com>"]
+repository = "https://github.com/dili91/testvox"
+readme = "README.md"
+keywords = ["continuous-integration", "ci", "testing"]
+license-file = "LICENSE"
+
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
