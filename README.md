@@ -76,8 +76,35 @@ The Github action has the following requirements and defaults values:
 
 # Use as CLI
 
-#TODO
+Install the library locally:
+
+```shell
+cargo install testvox
+```
+
+then, invoke it from your terminal:
+
+```shell
+testvox --help
+
+Usage: testvox [OPTIONS] <TITLE> [REPORTS_PATTERN]...
+
+Arguments:
+  <TITLE>               The title of the test report
+  [REPORTS_PATTERN]...  The test report pattern to look for [default: ./build/test-results/**/*.xml,./app/build/test-results/**/*.xml]
+
+Options:
+      --include-skipped  Whether to include skipped tests in the report
+      --include-passed   Whether to include passed tests in the report
+  -h, --help             Print help
+```
 
 # Use as library
 
-#TODO
+Testvox can be also used as library when needed. You can install it by adding the crate to your project: 
+
+```shell
+cargo add testvox
+```
+
+You can then refer to its [create_test_report](https://docs.rs/testvox/latest/testvox/fn.create_test_report.html) function to start using it.
