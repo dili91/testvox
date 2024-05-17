@@ -6,7 +6,7 @@ edition = "2021"
 authors = ["Andrea Di Lisio <andrea.dilisio91@gmail.com>"]
 repository = "https://github.com/dili91/testvox"
 readme = "README.md"
-keywords = ["continuous-integration", "ci", "testing"]
+keywords = ["ci", "testing"]
 license-file = "LICENSE"
 include = [
     "**/*.rs",
