@@ -82,7 +82,7 @@ mod tests {
         let req = CreateTestReportRequest {
             title: "My cool test report".to_string(),
             reports_contents: vec![
-                fs::read_to_string("./test-results/basic.xml").expect("Unable to read file")
+                fs::read_to_string("./test-data/junit.xml").expect("Unable to read file")
             ],
             include_passed: true,
             include_skipped: true,
