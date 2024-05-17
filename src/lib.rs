@@ -1,4 +1,5 @@
-//TODO: documentation
+//!
+//! Testvox helps you turning test reports into human readable messages, ready to be shared on common messaging apps.
 
 use anyhow::Result;
 use models::{
@@ -11,6 +12,8 @@ pub mod models;
 pub mod parsers;
 pub mod reporters;
 
+/// Utility to create a test report of the desired format. The generic type `T` must implement traits
+/// that hold the logic of how the test results in specific formats should be formatted, and pretty printed.
 pub fn create_test_report<T>(request: CreateTestReportRequest) -> T
 where
     T: From<ReportBuilder> + PrettyPrint,
@@ -48,11 +51,16 @@ fn detect_parser(report_content: String) -> Result<Box<dyn TestParser>> {
     Ok(Box::new(JunitTestParser::from(report_content)))
 }
 
+/// A struct that describe the request for creating a report
 #[derive(Default)]
 pub struct CreateTestReportRequest {
+    /// the title that the generated report should have 
     pub title: String,
+    /// the contents of the test results to parse 
     pub reports_contents: Vec<String>,
+    /// whether to include passed tests in the generated reports
     pub include_passed: bool,
+    /// whether to include passed tests in the generated reports
     pub include_skipped: bool,
 }
 

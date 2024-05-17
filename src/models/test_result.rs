@@ -1,27 +1,40 @@
 use super::test_status::TestStatus;
 
+/// Struct that defines the domain test result object
 #[derive(Clone)]
 pub struct TestResult {
+    /// Name of the test
     pub name: String,
+    /// Optional name of the suite in which the test is contained
     pub suite_name: Option<String>,
+    /// Optional execution time associated to the test
     pub execution_time: Option<f32>,
+    /// The status of the test
     pub status: TestStatus,
+    /// Optional failure message related to a failed test
     pub failure_message: Option<String>,
 }
 
 impl TestResult {
+    /// Yields a builder of instances of the `TestResult` type
     pub fn builder() -> TestResultBuilder {
         TestResultBuilder::default()
     }
 }
 
+/// Builder for the domain `TestResult` type
 #[derive(Default, Clone)]
 pub struct TestResultBuilder {
+    /// Name of the test
     name: String,
+    /// Optional name of the suite in which the test is included
     suite_name: Option<String>,
-    pub execution_time: Option<f32>,
-    pub status: TestStatus,
-    pub failure_message: Option<String>,
+    /// Optional execution time
+    execution_time: Option<f32>,
+    /// Status of the test
+    status: TestStatus,
+    /// Failure message of a failed test
+    failure_message: Option<String>,
 }
 
 impl TestResultBuilder {
@@ -62,6 +75,7 @@ impl TestResultBuilder {
 }
 
 impl TestResult {
+    /// Utility that pretty prints the test message, using markdown syntax
     pub(crate) fn to_markdown_string(&self) -> String {
         match self.status {
             TestStatus::Passed => {

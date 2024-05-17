@@ -1,13 +1,18 @@
 use super::{test_result::TestResult, test_status::TestStatus};
 use std::collections::HashSet;
 
+/// Responsible for building the Report domain object.
 #[derive(Default)]
 pub struct ReportBuilder {
+    /// the title of the report
     pub(crate) title: String,
+    /// the test results to parse
     pub(crate) test_results: Vec<TestResult>,
+    /// the test status that should be included in the report
     pub(crate) reportable_statuses: HashSet<TestStatus>,
 }
 
+/// Implementation of the report builder
 impl ReportBuilder {
     pub fn new() -> ReportBuilder {
         let mut rb = ReportBuilder::default();
@@ -35,6 +40,7 @@ impl ReportBuilder {
         self
     }
 
+    /// Builds a report of the generic type `T`
     pub fn build<T>(mut self) -> T
     where
         T: From<ReportBuilder> + PrettyPrint,
@@ -47,7 +53,9 @@ impl ReportBuilder {
     }
 }
 
+/// Trait that define the function that should be implemented for pretty printing a report
 pub trait PrettyPrint {
+    // Utility that produce a report in pretty format
     fn to_string_pretty(&self) -> String;
 }
 
