@@ -8,8 +8,11 @@ use models::{
 };
 use parsers::{junit::JunitTestParser, TestParser};
 
+/// basic models of the library
 pub mod models;
+/// generic and custom parsers types
 pub mod parsers;
+/// generic and custom reporter types
 pub mod reporters;
 
 /// Utility to create a test report of the desired format. The generic type `T` must implement traits
