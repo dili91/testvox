@@ -8,7 +8,14 @@ repository = "https://github.com/dili91/testvox"
 readme = "README.md"
 keywords = ["continuous-integration", "ci", "testing"]
 license-file = "LICENSE"
-
+exclude = [
+    ".github/*",
+    "images/*",
+    "action.yml",
+    "Dockerfile",
+    "entrypoint.sh",
+    "justfile"
+]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
