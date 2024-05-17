@@ -1,8 +1,8 @@
-<p align="center">
-  <img src='./images/sample.png'/>
-</p>
+![testvox-logo](./images/sample.png)
 
 # Testvox: turns test reports into simple, human readable summaries
+
+[![Crates.io](https://img.shields.io/crates/v/testvox.svg)](https://crates.io/crates/testvox)
 
 Testvox is tiny Rust library with a very simple objective: turning test reports into human readable summaries, to be shared on common messaging apps.
 The project simply deals with reports generation, it does not care about *sending* those reports.
