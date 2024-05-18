@@ -13,7 +13,7 @@ jobs:
     with:
       checkout_ref: ${{ github.ref }}
   publish-crate-test:
-    needs: build-test-coverage
+    # needs: build-test-coverage
     runs-on: ubuntu-latest
     steps:
       - name: Install Just
