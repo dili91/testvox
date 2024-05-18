@@ -18,6 +18,7 @@ jobs:
     steps:
       - name: Install Just
         run: sudo snap install --edge --classic just
+      - uses: actions/checkout@v4
       - name: Check if version 1.0.0 version is available
         run: just check-crate-version-available 1.0.0
       - name: Check if version 0.1.0 version is available
