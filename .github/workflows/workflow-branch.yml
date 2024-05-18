@@ -1,0 +1,14 @@
+name: Build, Test, Format
+
+on:
+  push:
+    branches-ignore:
+      - 'main'
+    tags-ignore:
+      - '**'
+
+jobs:
+  build-test-coverage:
+  uses: ./.github/workflows/build-format-test.yml
+  with:
+    checkout_ref: ${{ github.ref }}
