@@ -19,17 +19,20 @@ jobs:
       - name: Install Just
         run: sudo snap install --edge --classic just
       - uses: actions/checkout@v4
-      - name: test
-        run: |
-          version=0.1.0
-          response=$(curl -s -o /dev/null -w "%{http_code}" https://crates.io/api/v1/crates/testvox/{{version}})
-          if [[ $response == 2* ]]; then
-              echo "Version {{version}} is already published on crates.io"
-              exit 1
-          fi
+      # - name: test
+      #   run: |
+      #     version=0.1.0
+      #     response=$(curl -s -o /dev/null -w "%{http_code}" https://crates.io/api/v1/crates/testvox/{{version}})
+      #     if [[ $response == 2* ]]; then
+      #         echo "Version {{version}} is already published on crates.io"
+      #         exit 1
+      #     fi
       - name: Check if version 1.0.0 version is available
+        shell: bash
         run: just check-crate-version-available 1.0.0
       - name: Check if version 0.1.0 version is available
+        shell: bash
         run: just check-crate-version-available 0.1.0
       - name: Check if version 0.1.1 version is available
+        shell: bash
         run: just check-crate-version-available 0.1.1
