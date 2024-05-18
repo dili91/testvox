@@ -18,6 +18,7 @@ jobs:
     steps:
       - name: Install Just
         run: sudo snap install --edge --classic just
+      - uses: dtolnay/rust-toolchain@stable
       - uses: actions/checkout@v4
       - name: Get current project version from Cargo.toml
         run: echo "CRATE_VERSION=$(cargo metadata --format-version=1 --no-deps | jq -r '.packages[0].version'" >> $GITHUB_ENV
