@@ -29,10 +29,11 @@ run test_reports_patterns=default_test_reports_patterns:
     --title "A simple test report" \
     "{{test_reports_patterns}}"
 
-check-crate-version-available version:
+check-crate-version-available:
     #!/bin/bash
-    response=$(curl -s -o /dev/null -w "%{http_code}" https://crates.io/api/v1/crates/testvox/{{version}})
+    crate_version=$(cargo metadata --format-version=1 --no-deps | jq -r '.packages[0].version')
+    response=$(curl -s -o /dev/null -w "%{http_code}" https://crates.io/api/v1/crates/testvox/$crate_version)
     if [[ $response == 2* ]]; then
-        echo "Version {{version}} is already published on crates.io"
+        echo "Version $crate_version is already published on crates.io"
         exit 1
     fi
