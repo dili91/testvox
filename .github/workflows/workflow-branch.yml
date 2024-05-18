@@ -16,7 +16,10 @@ jobs:
     needs: build-test-coverage
     runs-on: ubuntu-latest
     steps:
+      - name: Install Just
+        run: sudo snap install --edge --classic just
       - name: Check if version 1.0.0 version is available
+        uses: extractions/setup-just@v2
         run: just check-crate-version-available 1.0.0
       - name: Check if version 0.1.0 version is available
         run: just check-crate-version-available 0.1.0
