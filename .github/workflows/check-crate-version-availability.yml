@@ -1,0 +1,25 @@
+# Reusable workflow to check if the project version defined in Cargo.toml is already used
+name: Check crate's version availability
+
+on:
+  workflow_call:
+    inputs:
+      checkout_ref:
+        description: 'The reference to checkout before running the acceptance tests. Used to run the tests on a fork.'
+        required: true
+        type: string
+
+jobs:
+  check_crate_version_availability:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Just
+        run: sudo snap install --edge --classic just
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.checkout_ref }}
+      - name: Check if crate version is available
+        shell: bash
+        run: just check-crate-version-available
