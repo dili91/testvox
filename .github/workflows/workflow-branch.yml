@@ -9,6 +9,6 @@ on:
 
 jobs:
   build-test-coverage:
-  uses: ./.github/workflows/build-format-test.yml
-  with:
-    checkout_ref: ${{ github.ref }}
+    uses: ./.github/workflows/build-format-test.yml
+    with:
+      checkout_ref: ${{ github.ref }}
