@@ -12,3 +12,13 @@ jobs:
     uses: ./.github/workflows/build-format-test.yml
     with:
       checkout_ref: ${{ github.ref }}
+  publish-crate-test:
+    needs: build-test-coverage
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if version 1.0.0 version is available
+        run: just check-crate-version-available 1.0.0
+      - name: Check if version 0.1.0 version is available
+        run: just check-crate-version-available 0.1.0
+      - name: Check if version 0.1.1 version is available
+        run: just check-crate-version-available 0.1.1
