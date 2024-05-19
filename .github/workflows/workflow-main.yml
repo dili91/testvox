@@ -1,0 +1,29 @@
+name: Workflow on main branch
+
+on:
+  push:
+    branches:
+      - 'main'
+    tags-ignore:
+      - '**'
+
+jobs:
+  build-lint-test:
+    uses: ./.github/workflows/build-lint-test.yml
+    with:
+      checkout_ref: ${{ github.ref }}
+  check-crate-version-availability:
+    uses: ./.github/workflows/check-crate-version-availability.yml
+    with:
+      checkout_ref: ${{ github.ref }}
+  e2e-tests:
+    uses: ./.github/workflows/e2e-tests.yml
+    with:
+      checkout_ref: ${{ github.ref }}
+    secrets:
+      slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL}}
+  release:
+    name: Release project on crates.io, Docker and on Github
+    steps:
+      - uses: actions/checkout@v4
+    #todo  
