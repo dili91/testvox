@@ -20,3 +20,5 @@ jobs:
     uses: ./.github/workflows/e2e-tests.yml
     with:
       checkout_ref: ${{ github.ref }}
+    secrets:
+      slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL}}

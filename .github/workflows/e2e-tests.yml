@@ -5,6 +5,9 @@ on:
         description: 'The reference to checkout before running the acceptance tests. Used to run the tests on a fork.'
         required: true
         type: string
+    secrets:
+      slack_webhook_url:
+        required: true
 
 jobs:
   tests:
@@ -24,5 +27,5 @@ jobs:
         with:
           payload: ${{steps.generate_slack_report.outputs.report}}
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_URL: ${{ secrets.slack_webhook_url }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
