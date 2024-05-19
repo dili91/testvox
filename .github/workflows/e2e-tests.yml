@@ -8,7 +8,6 @@ on:
 
 jobs:
   tests:
-    name: End to end tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
