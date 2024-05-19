@@ -1,7 +1,10 @@
 on:
-  create:
-    tags:
-      - '*'
+  workflow_call:
+    inputs:
+      checkout_ref:
+        description: 'The reference to checkout before running the acceptance tests. Used to run the tests on a fork.'
+        required: true
+        type: string
 
 jobs:
   tests:
@@ -9,7 +12,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ./ # Uses an action in the root directory
+        with:
+          ref: ${{ inputs.checkout_ref }}
+      - uses: dili91/testvox@${{ inputs.checkout_ref }}
         name: Generate Slack report from Junit results
         id: generate_slack_report
         with:

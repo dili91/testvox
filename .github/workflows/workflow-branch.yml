@@ -16,3 +16,7 @@ jobs:
     uses: ./.github/workflows/check-crate-version-availability.yml
     with:
       checkout_ref: ${{ github.ref }}
+  e2e-tests:
+    uses: ./.github/workflows/e2e-tests.yml
+    with:
+      checkout_ref: ${{ github.ref }}
