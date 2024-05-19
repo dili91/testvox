@@ -1,5 +1,5 @@
 # Reusable workflow to build, format and test the project
-name: Build, Format, Test
+name: Build, Lint, Test
 
 on:
   workflow_call:
@@ -10,7 +10,7 @@ on:
         type: string
 
 jobs:
-  build_format_test:
+  build_lint_test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

@@ -1,4 +1,4 @@
-name: Build, Test, Format
+name: Workflow branch
 
 on:
   push:
@@ -8,8 +8,8 @@ on:
       - '**'
 
 jobs:
-  build-test-coverage:
-    uses: ./.github/workflows/build-format-test.yml
+  build-lint-test:
+    uses: ./.github/workflows/build-lint-test.yml
     with:
       checkout_ref: ${{ github.ref }}
   check-crate-version-availability:
