@@ -21,9 +21,9 @@ jobs:
     name: Release project on crates.io, Docker and on Github
     runs-on: ubuntu-latest
     #TODO: review dependencies
-    needs: check_crate_version_availability
     steps:
       - uses: actions/checkout@v4
       - name: "publishing..."
         run: |
-          echo "I'm publishing version ${{needs.check_crate_version_availability.outputs.version}}"
+          crate_version=$(just get-project-version)
+          echo "I'm publishing version $crate_version"
