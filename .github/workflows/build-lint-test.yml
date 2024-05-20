@@ -26,3 +26,7 @@ jobs:
         run: cargo clippy -- -D warnings
       - name: Run tests
         run: cargo test
+      - name: Build docker
+        uses: docker/build-push-action@v5
+        with:
+          tags: adilisio/testvox:${{ needs.get_project_version.outputs.version }}

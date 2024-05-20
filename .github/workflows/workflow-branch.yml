@@ -16,14 +16,13 @@ jobs:
     uses: ./.github/workflows/check-crate-version-availability.yml
     with:
       checkout_ref: ${{ github.ref }}
-  #TODO: move    
-  release-docker:
-    name: Release project on crates.io, Docker and on Github
+  
+  #TODO: move
+  get_project_version:
+    name: Retrieve version info from Cargo.toml
     runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-      attestations: write
-    #TODO: review dependencies
+    outputs:
+      version: ${{ steps.get_project_version.outputs.version }}
     steps:
       - name: Install Just
         run: sudo snap install --edge --classic just
@@ -31,11 +30,28 @@ jobs:
       - name: "Get project version"
         id: get_project_version
         run: |
-          crate_version=$(just get-project-version)
-          echo "VERSION=$crate_version" >> $GITHUB_OUTPUT
-      # TODO: remove
-      - name: "Publishing..."
-        run: echo ${{ steps.get_project_version.outputs.VERSION }}
+          version=$(just get-project-version)
+          echo "VERSION=$version" >> $GITHUB_OUTPUT
+  release_github:
+    name: Release on Github
+    runs-on: ubuntu-latest
+    needs: [build_lint_test, check_crate_version_availability, get_project_version]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ needs.get_project_version.outputs.version }}
+          generate_release_notes: true
+  release_docker:
+    name: Release on Dockerhub
+    runs-on: ubuntu-latest
+    needs: [build_lint_test, check_crate_version_availability, get_project_version]
+    permissions:
+      id-token: write
+      attestations: write
+    steps:
+      - uses: actions/checkout@v4
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
@@ -46,9 +62,20 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: adilisio/testvox:${{ steps.get_project_version.outputs.VERSION }}
+          tags: adilisio/testvox:${{ needs.get_project_version.outputs.version }}
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v1
         with:
           subject-name: index.docker.io/adilisio/testvox
           subject-digest: ${{ steps.push.outputs.digest }}
+  release_crates_io:
+    name: Release on Crates.io
+    runs-on: ubuntu-latest
+    needs: [build_lint_test, check_crate_version_availability, get_project_version]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.checkout_ref }}
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Publish
+        run: cargo publish --dry-run
