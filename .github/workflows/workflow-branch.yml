@@ -49,6 +49,6 @@ jobs:
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v1
         with:
-          subject-name: adilisio/testvox:${{ steps.get_project_version.outputs.VERSION }}
+          subject-name: index.docker.io/adilisio/testvox:${{ steps.get_project_version.outputs.VERSION }}
           subject-digest: ${{ steps.push.outputs.digest }}
           push-to-registry: true
