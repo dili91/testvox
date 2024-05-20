@@ -17,7 +17,7 @@ jobs:
     with:
       checkout_ref: ${{ github.ref }}
   #TODO: move    
-  release:
+  release-docker:
     name: Release project on crates.io, Docker and on Github
     runs-on: ubuntu-latest
     #TODO: review dependencies
@@ -32,3 +32,19 @@ jobs:
           echo "VERSION=$crate_version" >> $GITHUB_OUTPUT
       - name: "Publishing..."
         run: echo ${{ steps.get_project_version.outputs.VERSION }}
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          push: true
+          tags: adilisio/testvox:${{ steps.get_project_version.outputs.VERSION }}
+      - name: Generate artifact attestation
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}
+          subject-digest: ${{ steps.push.outputs.digest }}
+          push-to-registry: true
