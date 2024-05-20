@@ -22,10 +22,9 @@ jobs:
         with:
           ref: ${{ inputs.checkout_ref }}
       - name: Check if crate version is available
-        shell: bash
         run: just check-crate-version-available
       - name: Output project version
         id: get_project_version
         run: |
-          crate_version=$((just get-project-version))
+          crate_version=$(just get-project-version)
           echo "version=$crate_version" >> "$GITHUB_OUTPUT"
