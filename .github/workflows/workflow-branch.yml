@@ -16,3 +16,14 @@ jobs:
     uses: ./.github/workflows/check-crate-version-availability.yml
     with:
       checkout_ref: ${{ github.ref }}
+  #TODO: move    
+  release:
+    name: Release project on crates.io, Docker and on Github
+    steps:
+      - name: Install Just
+        run: sudo snap install --edge --classic just
+      - uses: actions/checkout@v4
+      - name: "publishing..."
+        command: |
+          crate_version=$(just get-project-version)
+          echo "I'm publishing version $crate_version"

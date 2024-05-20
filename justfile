@@ -5,6 +5,7 @@ alias r     := run
 alias f     := format
 alias t     := test
 
+project_version:= `cargo metadata --format-version=1 --no-deps | jq -r '.packages[0].version'`
 default_test_reports_patterns := "./test-results/**/*.xml"
 
 docker-build:
@@ -29,11 +30,13 @@ run test_reports_patterns=default_test_reports_patterns:
     --title "A simple test report" \
     "{{test_reports_patterns}}"
 
+get-project-version:
+    @echo {{project_version}}
+
 check-crate-version-available:
     #!/bin/bash
-    crate_version=$(cargo metadata --format-version=1 --no-deps | jq -r '.packages[0].version')
-    response=$(curl -s -o /dev/null -w "%{http_code}" https://crates.io/api/v1/crates/testvox/$crate_version)
+    response=$(curl -s -o /dev/null -w "%{http_code}" https://crates.io/api/v1/crates/testvox/{{project_version}})
     if [[ $response == 2* ]]; then
-        echo "Version $crate_version is already published on crates.io"
+        echo "Version {{project_version}} is already published on crates.io"
         exit 1
     fi
