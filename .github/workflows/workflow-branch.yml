@@ -20,11 +20,10 @@ jobs:
   release:
     name: Release project on crates.io, Docker and on Github
     runs-on: ubuntu-latest
+    #TODO: review dependencies
+    needs: check-crate-version-availability
     steps:
-      - name: Install Just
-        run: sudo snap install --edge --classic just
       - uses: actions/checkout@v4
       - name: "publishing..."
         run: |
-          crate_version=$(just get-project-version)
-          echo "I'm publishing version $crate_version"
+          echo "I'm publishing version ${{needs.check-crate-version-availability.outputs.version}}"

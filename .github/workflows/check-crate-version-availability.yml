@@ -12,6 +12,8 @@ on:
 jobs:
   check_crate_version_availability:
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.get_project_version.outputs.version }}
     steps:
       - name: Install Just
         run: sudo snap install --edge --classic just
@@ -22,3 +24,8 @@ jobs:
       - name: Check if crate version is available
         shell: bash
         run: just check-crate-version-available
+      - name: Output project version
+        id: get_project_version
+        run: |
+          version=$(just get-project-version)
+          echo "version=$version" >> "$GITHUB_OUTPUT"
