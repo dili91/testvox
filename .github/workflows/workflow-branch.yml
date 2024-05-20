@@ -22,8 +22,13 @@ jobs:
     runs-on: ubuntu-latest
     #TODO: review dependencies
     steps:
+      - name: Install Just
+        run: sudo snap install --edge --classic just
       - uses: actions/checkout@v4
-      - name: "publishing..."
+      - name: "Get project version"
+        id: get_project_version
         run: |
           crate_version=$(just get-project-version)
-          echo "I'm publishing version $crate_version"
+          echo "VERSION=$crate_version" >> $GITHUB_OUTPUT
+      - name: "Publishing..."
+        run: "I'm publishing version: ${{ steps.get_project_version.outputs.VERSION }}"
