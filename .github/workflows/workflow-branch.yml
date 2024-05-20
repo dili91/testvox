@@ -31,4 +31,4 @@ jobs:
           crate_version=$(just get-project-version)
           echo "VERSION=$crate_version" >> $GITHUB_OUTPUT
       - name: "Publishing..."
-        run: echo $VERSION
+        run: echo ${{ steps.get_project_version.outputs.VERSION }}
