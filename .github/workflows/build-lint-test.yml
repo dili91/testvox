@@ -29,4 +29,4 @@ jobs:
       - name: Build docker
         uses: docker/build-push-action@v5
         with:
-          tags: adilisio/testvox:${{ needs.get_project_version.outputs.version }}
+          tags: adilisio/testvox
