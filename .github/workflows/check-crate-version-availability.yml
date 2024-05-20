@@ -27,4 +27,5 @@ jobs:
         id: get_project_version
         run: |
           crate_version=$(just get-project-version)
+          echo $crate_version
           echo "version=$crate_version" >> "$GITHUB_OUTPUT"
