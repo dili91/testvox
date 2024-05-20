@@ -52,4 +52,3 @@ jobs:
         with:
           subject-name: index.docker.io/adilisio/testvox
           subject-digest: ${{ steps.push.outputs.digest }}
-          push-to-registry: true
