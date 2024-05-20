@@ -22,8 +22,10 @@ jobs:
     runs-on: ubuntu-latest
     #TODO: review dependencies
     needs: check-crate-version-availability
+    env:
+        VERSION: ${{needs.check-crate-version-availability.outputs.version}}
     steps:
       - uses: actions/checkout@v4
       - name: "publishing..."
         run: |
-          echo "I'm publishing version ${{needs.check-crate-version-availability.outputs.version}}"
+          echo "I'm publishing version ${VERSION}"
