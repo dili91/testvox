@@ -19,6 +19,7 @@ jobs:
   #TODO: move    
   release:
     name: Release project on crates.io, Docker and on Github
+    runs-on: ubuntu-latest
     steps:
       - name: Install Just
         run: sudo snap install --edge --classic just
