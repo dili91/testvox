@@ -8,11 +8,11 @@ on:
       - '**'
 
 jobs:
-  build-lint-test:
+  build_lint_test:
     uses: ./.github/workflows/build-lint-test.yml
     with:
       checkout_ref: ${{ github.ref }}
-  check-crate-version-availability:
+  check_crate_version_availability:
     uses: ./.github/workflows/check-crate-version-availability.yml
     with:
       checkout_ref: ${{ github.ref }}
@@ -21,11 +21,9 @@ jobs:
     name: Release project on crates.io, Docker and on Github
     runs-on: ubuntu-latest
     #TODO: review dependencies
-    needs: check-crate-version-availability
-    env:
-        VERSION: ${{needs.check-crate-version-availability.outputs.version}}
+    needs: check_crate_version_availability
     steps:
       - uses: actions/checkout@v4
       - name: "publishing..."
         run: |
-          echo "I'm publishing version ${VERSION}"
+          echo "I'm publishing version ${{needs.check_crate_version_availability.outputs.version}}"
