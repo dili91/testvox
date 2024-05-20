@@ -20,6 +20,9 @@ jobs:
   release-docker:
     name: Release project on crates.io, Docker and on Github
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      attestations: write
     #TODO: review dependencies
     steps:
       - name: Install Just
