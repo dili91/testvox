@@ -38,10 +38,17 @@ jobs:
     needs: [build_lint_test, check_crate_version_availability, get_project_version]
     steps:
       - uses: actions/checkout@v4
+      - name: Create tag
+        id: create_tag
+        uses: mathieudutour/github-tag-action@v6
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          custom_tag: ${{ needs.get_project_version.outputs.version }}
+          tag_prefix: 'v'
       - name: Create release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v${{ needs.get_project_version.outputs.version }}
+          tag_name:  ${{ steps.create_tag.outputs.new_tag }}
           generate_release_notes: true
   release_docker:
     name: Release on Dockerhub
