@@ -99,6 +99,68 @@ Options:
   -h, --help             Print help
 ```
 
+## With Docker
+
+Optionally, you can get the same use the Docker image: 
+
+```shell
+docker run --platform=linux/amd64 -v $(PWD):/tmp adilisio/testvox:0.1.1 --include-passed "Hello!" "/tmp/**/*.xml"
+
+
+{
+  "blocks": [
+    {
+      "type": "header",
+      "text": {
+        "type": "plain_text",
+        "text": "Hello!",
+        "emoji": true
+      }
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "✅ _/observe/health endpoint should return 200 and health information_ *passed* (`0.049s`)"
+      }
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "✅ _/posts endpoint should return 200 with a list of posts_ *passed* (`0.06s`)"
+      }
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "✅ _It should yield a Post mapper_ *passed* (`0.01s`)"
+      }
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "✅ _It should convert a raw DbRow object to a Post object_ *passed* (`0.616s`)"
+      }
+    }
+  ]
+}
+```
+
 # Use as library
 
 Testvox can be also used as library when needed. You can install it by adding the crate to your project: 
