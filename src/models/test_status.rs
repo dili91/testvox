@@ -1,6 +1,7 @@
 use core::fmt;
 use std::{cmp::Ordering, fmt::Formatter};
 
+/// Enum that defines the universe of test statuses
 #[derive(PartialEq, Eq, Hash, Default, Clone, Debug)]
 pub enum TestStatus {
     #[default]

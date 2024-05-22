@@ -1,0 +1,32 @@
+# Reusable workflow to build, format and test the project
+name: Build, Lint, Test
+
+on:
+  workflow_call:
+    inputs:
+      checkout_ref:
+        description: 'The reference to checkout before running the acceptance tests. Used to run the tests on a fork.'
+        required: true
+        type: string
+
+jobs:
+  build_lint_test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.checkout_ref }}
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
+      - name: Enforce formatting
+        run: cargo fmt --check
+      - name: Linting
+        run: cargo clippy -- -D warnings
+      - name: Run tests
+        run: cargo test
+      - name: Build docker
+        uses: docker/build-push-action@v5
+        with:
+          tags: adilisio/testvox

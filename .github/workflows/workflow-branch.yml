@@ -1,0 +1,18 @@
+name: Workflow on branch, excluding main
+
+on:
+  push:
+    branches-ignore:
+      - 'main'
+    tags-ignore:
+      - '**'
+
+jobs:
+  build_lint_test:
+    uses: ./.github/workflows/build-lint-test.yml
+    with:
+      checkout_ref: ${{ github.ref }}
+  check_crate_version_availability:
+    uses: ./.github/workflows/check-crate-version-availability.yml
+    with:
+      checkout_ref: ${{ github.ref }}

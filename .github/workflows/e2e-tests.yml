@@ -1,21 +1,31 @@
-on: [push]
+on:
+  workflow_call:
+    inputs:
+      checkout_ref:
+        description: 'The reference to checkout before running the acceptance tests. Used to run the tests on a fork.'
+        required: true
+        type: string
+    secrets:
+      slack_webhook_url:
+        required: true
 
 jobs:
   tests:
-    name: Acceptance Tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.checkout_ref }}
       - uses: ./ # Uses an action in the root directory
         name: Generate Slack report from Junit results
         id: generate_slack_report
         with:
           include_skipped: true
-          reports_pattern: "./test-results/**/*.xml"
+          reports_pattern: "./test-data/*.xml"
       - name: Send Slack report
         uses: slackapi/slack-github-action@v1.26.0
         with:
           payload: ${{steps.generate_slack_report.outputs.report}}
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_URL: ${{ secrets.slack_webhook_url }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK

@@ -6,6 +6,7 @@ use crate::models::{test_result::TestResult, test_status::TestStatus};
 
 use super::TestParser;
 
+/// Struct that defines the Junit test parser
 pub struct JunitTestParser {
     pub content: String,
 }
@@ -16,6 +17,7 @@ impl JunitTestParser {
     }
 }
 
+/// Logic that converts Junit test results into a list of `TestResult` domain instances
 impl TestParser for JunitTestParser {
     fn parse(&self) -> Result<Vec<TestResult>> {
         let doc = Document::parse(self.content.as_str())?;

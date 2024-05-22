@@ -4,11 +4,13 @@ use crate::models::{
 };
 use serde::Serialize;
 
+/// Struct that defines a Slack report
 #[derive(Serialize)]
 pub struct SlackReport {
     pub blocks: Vec<Block>,
 }
 
+/// Enum that defines the variant of Block objects in Slack
 #[derive(Serialize)]
 #[serde(tag = "type", rename_all = "lowercase")]
 pub enum Block {
@@ -17,6 +19,7 @@ pub enum Block {
     Divider,
 }
 
+/// Struct that represents Slack's block JSON types
 #[derive(Serialize)]
 #[serde(tag = "type", rename = "plain_text")]
 pub struct PlainText {
@@ -24,18 +27,21 @@ pub struct PlainText {
     pub emoji: bool,
 }
 
+/// Defines a markdown test object following Slack syntax
 #[derive(Serialize)]
 #[serde(tag = "type", rename = "mrkdwn")]
 pub struct MarkdownText {
     pub text: String,
 }
 
+/// Pretty print implementation for the Slack report type
 impl PrettyPrint for SlackReport {
     fn to_string_pretty(&self) -> String {
         serde_json::to_string_pretty(&self).expect("unable to serialize report to JSON")
     }
 }
 
+/// Turns test results into a Slack report
 impl From<ReportBuilder> for SlackReport {
     fn from(value: ReportBuilder) -> Self {
         let header_block = Block::Header {
