@@ -7,6 +7,7 @@ use testvox::{
     CreateTestReportRequest,
 };
 
+/// Turns test reports into human readable summaries, to be shared on common messaging apps.
 #[derive(Parser)]
 #[command(arg_required_else_help(true))]
 struct CliArgs {
