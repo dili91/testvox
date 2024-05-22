@@ -12,15 +12,18 @@ use testvox::{
 #[command(arg_required_else_help(true))]
 struct CliArgs {
     /// The title of the test report
+    #[arg(short, long)]
     title: String,
-    #[arg(long, default_value_t = false)]
+    #[arg(short = 's', long, default_value_t = false)]
     /// Whether to include skipped tests in the report
     include_skipped: bool,
     /// Whether to include passed tests in the report
-    #[arg(long, default_value_t = false)]
+    #[arg(short = 'p', long, default_value_t = false)]
     include_passed: bool,
     /// The test report pattern to look for
     #[arg(
+        short, 
+        long,
         num_args(1..),
         value_delimiter= ',',
         default_value = "./build/test-results/**/*.xml,./app/build/test-results/**/*.xml")

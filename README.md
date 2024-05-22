@@ -87,16 +87,21 @@ then, invoke it from your terminal:
 ```shell
 testvox --help
 
-Usage: testvox [OPTIONS] <TITLE> [REPORTS_PATTERN]...
+Turns test reports into human readable summaries, to be shared on common messaging apps
 
-Arguments:
-  <TITLE>               The title of the test report
-  [REPORTS_PATTERN]...  The test report pattern to look for [default: ./build/test-results/**/*.xml,./app/build/test-results/**/*.xml]
+Usage: testvox [OPTIONS] --title <TITLE>
 
 Options:
-      --include-skipped  Whether to include skipped tests in the report
-      --include-passed   Whether to include passed tests in the report
-  -h, --help             Print help
+  -t, --title <TITLE>
+          The title of the test report
+  -s, --include-skipped
+          Whether to include skipped tests in the report
+  -p, --include-passed
+          Whether to include passed tests in the report
+  -r, --reports-pattern <REPORTS_PATTERN>...
+          The test report pattern to look for [default: ./build/test-results/**/*.xml,./app/build/test-results/**/*.xml]
+  -h, --help
+          Print help
 ```
 
 ## With Docker
@@ -104,7 +109,7 @@ Options:
 Optionally, you can get the same use the Docker image: 
 
 ```shell
-docker run --platform=linux/amd64 -v $(PWD):/tmp adilisio/testvox:0.1.1 --include-passed "Hello!" "/tmp/**/*.xml"
+docker run --platform=linux/amd64 -v $(PWD):/tmp adilisio/testvox:0.2.0 -p -t "Hello!" -r "/tmp/**/*.xml"
 
 
 {
