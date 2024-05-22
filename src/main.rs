@@ -8,6 +8,7 @@ use testvox::{
 };
 
 #[derive(Parser)]
+#[command(arg_required_else_help(true))]
 struct CliArgs {
     /// The title of the test report
     title: String,
