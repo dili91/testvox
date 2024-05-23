@@ -1,3 +1,4 @@
+use url::Url;
 use super::{test_result::TestResult, test_status::TestStatus};
 use std::collections::HashSet;
 
@@ -10,6 +11,8 @@ pub struct ReportBuilder {
     pub(crate) test_results: Vec<TestResult>,
     /// the test status that should be included in the report
     pub(crate) reportable_statuses: HashSet<TestStatus>,
+    /// optional link to the test report failing on CI/other systems
+    pub(crate) link: Option<Url>
 }
 
 /// Implementation of the report builder
@@ -40,6 +43,11 @@ impl ReportBuilder {
         self
     }
 
+    pub fn with_link(mut self, link: Url) -> ReportBuilder {
+        self.link = Some(link);
+        self
+    }
+
     /// Builds a report of the generic type `T`
     pub fn build<T>(mut self) -> T
     where
@@ -65,6 +73,7 @@ mod tests {
 
     use super::{PrettyPrint, ReportBuilder};
     use serde::Serialize;
+    use url::Url;
 
     #[test]
     fn should_build_a_default_report_builder() {
@@ -73,11 +82,12 @@ mod tests {
         assert_eq!(rb.title, "");
         assert!(rb.test_results.is_empty());
         assert_eq!(rb.reportable_statuses.len(), 1);
-        assert!(rb.reportable_statuses.contains(&TestStatus::Failed))
+        assert!(rb.reportable_statuses.contains(&TestStatus::Failed));
+        assert!(rb.link.is_none())
     }
 
     #[test]
-    fn should_build_a_report_with_given_title_and_test_results() {
+    fn should_build_a_report_with_given_details() {
         let test_results: Vec<TestResult> = vec![
             TestResult::builder()
                 .with_name("a-test-passed".to_string())
@@ -97,6 +107,7 @@ mod tests {
             .with_test_results(test_results)
             .include_passed()
             .include_skipped()
+            .with_link(Url::parse("http://localhost/test-run").unwrap())
             .build::<CustomReport>();
 
         assert_eq!(
@@ -106,7 +117,8 @@ mod tests {
 
     #[derive(Serialize)]
     struct CustomReport {
-        report_title: String,
+        title: String,
+        link: Url,
         test_results: Vec<(String, String)>,
     }
 
@@ -119,15 +131,16 @@ mod tests {
                 .collect();
 
             Self {
-                report_title: value.title,
+                title: value.title,
                 test_results,
+                link: value.link.expect("missing link")
             }
         }
     }
 
     impl PrettyPrint for CustomReport {
         fn to_string_pretty(&self) -> String {
-            format!("{}={:?}", self.report_title, self.test_results)
+            format!("{}\n{:?}\n{}", self.title, self.test_results, self.link)
         }
     }
 }
