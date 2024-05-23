@@ -20,14 +20,15 @@ inputs:
     description: "Whether to include passed tests in the report"
     default: false
   link:
-    description: "Optional link to view more details related to the report, usually a CI workflow"
+    description: "Optional link to view more details related to the report, usually a CI workflow. If not provided, the link to the Github workflow instance is used."
+    default: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 outputs:
   report:
     description: 'A human readable test report'
 runs:
   using: 'docker'
   image: 'Dockerfile'
-  entrypoint: /testvox/entrypoint.sh
+  entrypoint: /testvox/github_action_entrypoint.sh
   args:
     - "${{ inputs.include_skipped}}"
     - "${{ inputs.include_passed}}"

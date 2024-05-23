@@ -2,8 +2,8 @@
 # This entrypoint is only use by Github actions
 # and leverages an ad-hoc positional notation for arguments
 
-if [ "$#" -lt 4 ] || [ "$#" -gt 5 ]; then
-    printf "Invalid positional arguments.\nExpected: \$include_skipped \$include_passed \$title \$reports_patterns [\$link]" >&2
+if [ "$#" -ne 5 ]; then
+    printf "Invalid positional arguments.\nExpected: \$include_skipped \$include_passed \$title \$reports_patterns \$link" >&2
     exit 1
 fi
 
