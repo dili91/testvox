@@ -1,6 +1,6 @@
-use url::Url;
 use super::{test_result::TestResult, test_status::TestStatus};
 use std::collections::HashSet;
+use url::Url;
 
 /// Responsible for building the Report domain object.
 #[derive(Default)]
@@ -12,7 +12,7 @@ pub struct ReportBuilder {
     /// the test status that should be included in the report
     pub(crate) reportable_statuses: HashSet<TestStatus>,
     /// optional link to the test report failing on CI/other systems
-    pub(crate) link: Option<Url>
+    pub(crate) link: Option<Url>,
 }
 
 /// Implementation of the report builder
@@ -112,7 +112,7 @@ mod tests {
 
         assert_eq!(
             report.to_string_pretty(),
-            "a-report=[(\"a-test-failed\", \"Failed\"), (\"a-test-skipped\", \"Skipped\"), (\"a-test-passed\", \"Passed\")]");
+            "a-report|[(\"a-test-failed\", \"Failed\"), (\"a-test-skipped\", \"Skipped\"), (\"a-test-passed\", \"Passed\")]|http://localhost/test-run");
     }
 
     #[derive(Serialize)]
@@ -133,14 +133,14 @@ mod tests {
             Self {
                 title: value.title,
                 test_results,
-                link: value.link.expect("missing link")
+                link: value.link.expect("missing link"),
             }
         }
     }
 
     impl PrettyPrint for CustomReport {
         fn to_string_pretty(&self) -> String {
-            format!("{}\n{:?}\n{}", self.title, self.test_results, self.link)
+            format!("{}|{:?}|{}", self.title, self.test_results, self.link)
         }
     }
 }
