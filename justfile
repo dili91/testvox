@@ -6,13 +6,19 @@ alias f     := format
 alias t     := test
 
 project_version:= `cargo metadata --format-version=1 --no-deps | jq -r '.packages[0].version'`
-default_test_reports_patterns := "./test-results/**/*.xml"
+default_test_reports_patterns := "./test-data/*.xml"
 
 docker-build:
-    docker build . -t testvox
+    docker build . -t adilisio/testvox
 
 docker-run test_reports_patterns=default_test_reports_patterns:
-    docker run --rm --entrypoint /testvox/entrypoint.sh testvox \
+    docker run --rm adilisio/testvox -s -p \
+    -t "My test repo" \
+    -l "http://localhost/run/123" \
+    -r "/testvox/{{test_reports_patterns}}"
+
+docker-run-gh test_reports_patterns=default_test_reports_patterns:
+    docker run --rm --entrypoint /testvox/entrypoint.sh adilisio/testvox \
     true false "My test repo" "/testvox/{{test_reports_patterns}}"
 
 build:

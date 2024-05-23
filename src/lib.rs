@@ -7,6 +7,7 @@ use models::{
     test_result::TestResult,
 };
 use parsers::{junit::JunitTestParser, TestParser};
+use url::Url;
 
 /// basic models of the library
 pub mod models;
@@ -46,6 +47,10 @@ where
         report_builder = report_builder.include_skipped();
     }
 
+    if let Some(link) = request.link {
+        report_builder = report_builder.with_link(link);
+    }
+
     report_builder.build::<T>()
 }
 
@@ -63,14 +68,17 @@ pub struct CreateTestReportRequest {
     pub reports_contents: Vec<String>,
     /// whether to include passed tests in the generated reports
     pub include_passed: bool,
-    /// whether to include passed tests in the generated reports
+    /// whether to include skipped tests in the generated reports
     pub include_skipped: bool,
+    /// optional url to external system, usually a CI pipeline
+    pub link: Option<Url>,
 }
 
 #[cfg(test)]
 mod tests {
     use assert_json::assert_json;
     use std::fs;
+    use url::Url;
 
     use crate::{
         create_test_report, models::test_report::PrettyPrint, reporters::slack::SlackReport,
@@ -86,6 +94,7 @@ mod tests {
             ],
             include_passed: true,
             include_skipped: true,
+            link: Some(Url::parse("http://localhost/run/123").expect("unable to parse link")),
         };
 
         let report: SlackReport = create_test_report(req);
@@ -149,6 +158,23 @@ mod tests {
                         "text": "✅ _It should fail due to bad credentials_ *passed* (`0.781s`)",
                         "type": "mrkdwn"
                     }
+                },
+                {
+                    "type":"divider"
+                },
+                {
+                    "type":"actions",
+                    "elements": [
+                        {
+                            "type": "button",
+                            "text": {
+                                "type": "plain_text",
+                                "text": ":link:  View details",
+                                "emoji": true
+                            },
+                            "url": "http://localhost/run/123"
+                        }
+                    ]
                 }
             ]
         }

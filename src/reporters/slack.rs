@@ -3,6 +3,7 @@ use crate::models::{
     test_result::TestResult,
 };
 use serde::Serialize;
+use url::Url;
 
 /// Struct that defines a Slack report
 #[derive(Serialize)]
@@ -16,7 +17,14 @@ pub struct SlackReport {
 pub enum Block {
     Header { text: PlainText },
     Section { text: MarkdownText },
+    Actions { elements: Vec<Element> },
     Divider,
+}
+
+#[derive(Serialize)]
+#[serde(tag = "type", rename_all = "lowercase")]
+pub enum Element {
+    Button { text: PlainText, url: Url },
 }
 
 /// Struct that represents Slack's block JSON types
@@ -80,6 +88,22 @@ impl From<ReportBuilder> for SlackReport {
         let mut blocks = vec![header_block];
         blocks.append(&mut section_blocks);
 
+        if let Some(link) = value.link {
+            let mut link_blocks = vec![
+                Block::Divider,
+                Block::Actions {
+                    elements: vec![Element::Button {
+                        text: PlainText {
+                            text: ":link:  View details".to_string(),
+                            emoji: true,
+                        },
+                        url: link,
+                    }],
+                },
+            ];
+            blocks.append(&mut link_blocks);
+        }
+
         SlackReport { blocks }
     }
 }
@@ -105,6 +129,7 @@ mod tests {
         test_status::TestStatus,
     };
     use assert_json::assert_json;
+    use url::Url;
 
     use super::SlackReport;
 
@@ -158,6 +183,7 @@ mod tests {
             .with_status(TestStatus::Passed)
             .with_execution_time(3.3)
             .build();
+        let link = Url::parse("http://localhost/run/123").expect("unable to parse url");
 
         let report: SlackReport = ReportBuilder::new()
             .with_title(title.to_string())
@@ -168,6 +194,7 @@ mod tests {
                 test_passed.clone(),
                 test_skipped.clone(),
             ])
+            .with_link(link)
             .build();
 
         assert_json!(report.to_string_pretty().as_str(), {
@@ -209,6 +236,23 @@ mod tests {
                             "text": test_passed.to_markdown_string(),
                             "type": "mrkdwn"
                         }
+                    },
+                    {
+                        "type":"divider"
+                    },
+                    {
+                        "type":"actions",
+                        "elements": [
+                            {
+                                "type": "button",
+                                "text": {
+                                    "type": "plain_text",
+                                    "text": ":link:  View details",
+                                    "emoji": true
+                                },
+                                "url": "http://localhost/run/123"
+                            }
+                        ]
                     }
                 ]
             }

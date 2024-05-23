@@ -1,6 +1,7 @@
 use clap::Parser;
 use glob::glob;
 use std::{fs, path::PathBuf};
+use url::Url;
 
 use testvox::{
     create_test_report, models::test_report::PrettyPrint, reporters::slack::SlackReport,
@@ -12,7 +13,7 @@ use testvox::{
 #[command(arg_required_else_help(true))]
 struct CliArgs {
     /// The title of the test report
-    #[arg(short, long)]
+    #[arg(short, long, required = true)]
     title: String,
     #[arg(short = 's', long, default_value_t = false)]
     /// Whether to include skipped tests in the report
@@ -22,13 +23,17 @@ struct CliArgs {
     include_passed: bool,
     /// The test report pattern to look for
     #[arg(
-        short, 
+        short,
         long,
+        required = true,
         num_args(1..),
         value_delimiter= ',',
         default_value = "./build/test-results/**/*.xml,./app/build/test-results/**/*.xml")
     ]
     reports_pattern: Vec<String>,
+    /// Optional link to view more details related to the report, usually a CI workflow
+    #[arg(short, long, default_value = None)]
+    link: Option<Url>,
 }
 
 impl From<CliArgs> for CreateTestReportRequest {
@@ -54,6 +59,7 @@ impl From<CliArgs> for CreateTestReportRequest {
             reports_contents,
             include_passed: value.include_passed,
             include_skipped: value.include_skipped,
+            link: value.link,
         }
     }
 }

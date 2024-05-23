@@ -19,6 +19,8 @@ inputs:
   include_passed:
     description: "Whether to include passed tests in the report"
     default: false
+  link:
+    description: "Optional link to view more details related to the report, usually a CI workflow"
 outputs:
   report:
     description: 'A human readable test report'
@@ -31,5 +33,6 @@ runs:
     - "${{ inputs.include_passed}}"
     - "${{ inputs.title }}"
     - "/github/workspace/${{inputs.reports_pattern}}"
+    - "${{ inputs.link }}"
 
 
