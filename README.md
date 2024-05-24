@@ -67,12 +67,13 @@ jobs:
 
 The Github action has the following requirements and defaults values: 
 
-| Name            | Required           | Default                                |
-|-----------------|--------------------|----------------------------------------|
-| title           | :white_check_mark: | `${{ github.repository }} test report` |
-| reports_pattern | :white_check_mark: | `./build/test-results/*.xml`           |
-| include_skipped | :x:                | false                                  |
-| include_passed  | :x:                | false                                  |
+| Name            | Required           | Default                                                                                |
+|-----------------|--------------------|----------------------------------------------------------------------------------------|
+| title           | :white_check_mark: | `${{ github.repository }} test report`                                                 |
+| reports_pattern | :white_check_mark: | `./build/test-results/*.xml`                                                           |
+| include_skipped | :x:                | false                                                                                  |
+| include_passed  | :x:                | false                                                                                  |
+| link            | :x:                | `${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}`  |
 
 # Use as CLI
 
