@@ -6,6 +6,5 @@ images/
 test-data/
 *.md
 *.yml
-*.sh
 LICENSE
 .DS_Store
