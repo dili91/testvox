@@ -3,6 +3,8 @@
 # Testvox: turns test reports into simple, human readable summaries
 
 [![Crates.io](https://img.shields.io/crates/v/testvox.svg)](https://crates.io/crates/testvox)
+[![Docker](https://badgen.net/badge/icon/docker?icon=docker&label)](https://hub.docker.com/r/adilisio/testvox)
+
 
 Testvox is tiny Rust library with a very simple objective: turning test reports into human readable summaries, to be shared on common messaging apps.
 The project simply deals with reports generation, it does not care about *sending* those reports.
@@ -67,12 +69,13 @@ jobs:
 
 The Github action has the following requirements and defaults values: 
 
-| Name            | Required           | Default                                |
-|-----------------|--------------------|----------------------------------------|
-| title           | :white_check_mark: | `${{ github.repository }} test report` |
-| reports_pattern | :white_check_mark: | `./build/test-results/*.xml`           |
-| include_skipped | :x:                | false                                  |
-| include_passed  | :x:                | false                                  |
+| Name            | Required           | Default                                                                                |
+|-----------------|--------------------|----------------------------------------------------------------------------------------|
+| title           | :white_check_mark: | `${{ github.repository }} test report`                                                 |
+| reports_pattern | :white_check_mark: | `./build/test-results/*.xml`                                                           |
+| include_skipped | :x:                | false                                                                                  |
+| include_passed  | :x:                | false                                                                                  |
+| link            | :x:                | `${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}`  |
 
 # Use as CLI
 
@@ -87,16 +90,21 @@ then, invoke it from your terminal:
 ```shell
 testvox --help
 
-Usage: testvox [OPTIONS] <TITLE> [REPORTS_PATTERN]...
+Turns test reports into human readable summaries, to be shared on common messaging apps
 
-Arguments:
-  <TITLE>               The title of the test report
-  [REPORTS_PATTERN]...  The test report pattern to look for [default: ./build/test-results/**/*.xml,./app/build/test-results/**/*.xml]
+Usage: testvox [OPTIONS] --title <TITLE>
 
 Options:
-      --include-skipped  Whether to include skipped tests in the report
-      --include-passed   Whether to include passed tests in the report
-  -h, --help             Print help
+  -t, --title <TITLE>
+          The title of the test report
+  -s, --include-skipped
+          Whether to include skipped tests in the report
+  -p, --include-passed
+          Whether to include passed tests in the report
+  -r, --reports-pattern <REPORTS_PATTERN>...
+          The test report pattern to look for [default: ./build/test-results/**/*.xml,./app/build/test-results/**/*.xml]
+  -h, --help
+          Print help
 ```
 
 ## With Docker
@@ -104,7 +112,7 @@ Options:
 Optionally, you can get the same use the Docker image: 
 
 ```shell
-docker run --platform=linux/amd64 -v $(PWD):/tmp adilisio/testvox:0.1.1 --include-passed "Hello!" "/tmp/**/*.xml"
+docker run --platform=linux/amd64 -v $(PWD):/tmp adilisio/testvox:0.2.0 -p -t "Hello!" -r "/tmp/**/*.xml"
 
 
 {
