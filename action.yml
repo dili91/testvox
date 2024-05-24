@@ -28,7 +28,7 @@ outputs:
 runs:
   using: 'docker'
   image: 'Dockerfile'
-  entrypoint: /testvox/github_action_entrypoint.sh
+  entrypoint: /testvox/action_entrypoint.sh
   args:
     - "${{ inputs.include_skipped}}"
     - "${{ inputs.include_passed}}"
