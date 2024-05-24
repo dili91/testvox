@@ -3,6 +3,8 @@
 # Testvox: turns test reports into simple, human readable summaries
 
 [![Crates.io](https://img.shields.io/crates/v/testvox.svg)](https://crates.io/crates/testvox)
+[![Docker](https://badgen.net/badge/icon/docker?icon=docker&label)](https://hub.docker.com/r/adilisio/testvox)
+
 
 Testvox is tiny Rust library with a very simple objective: turning test reports into human readable summaries, to be shared on common messaging apps.
 The project simply deals with reports generation, it does not care about *sending* those reports.
