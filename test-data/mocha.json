@@ -1,0 +1,181 @@
+{
+    "stats":{
+        "suites":1,
+        "tests":7,
+        "passes":6,
+        "pending":0,
+        "failures":1,
+        "start":"2022-11-11T19:43:36.376Z",
+        "end":"2022-11-11T19:43:36.381Z",
+        "duration":5
+    },
+    "tests":[
+        {
+            "title":"return string",
+            "fullTitle":"formatDay() return string",
+            "file":"/home/pavel/testing/useful/tests/formatDay.test.js",
+            "duration":1,
+            "currentRetry":0,
+            "speed":"fast",
+            "err":{
+                
+            }
+        },
+        {
+            "title":"return correct format",
+            "fullTitle":"formatDay() return correct format",
+            "file":"/home/pavel/testing/useful/tests/formatDay.test.js",
+            "duration":0,
+            "currentRetry":0,
+            "speed":"fast",
+            "err":{
+                
+            }
+        },
+        {
+            "title":"month undefined",
+            "fullTitle":"formatDay() month undefined",
+            "file":"/home/pavel/testing/useful/tests/formatDay.test.js",
+            "duration":0,
+            "currentRetry":0,
+            "speed":"fast",
+            "err":{
+                
+            }
+        },
+        {
+            "title":"month null",
+            "fullTitle":"formatDay() month null",
+            "file":"/home/pavel/testing/useful/tests/formatDay.test.js",
+            "duration":1,
+            "currentRetry":0,
+            "err":{
+                "message":"expected undefined to equal 2",
+                "showDiff":true,
+                "expected":2,
+                "operator":"strictEqual",
+                "stack":"AssertionError: expected undefined to equal 2\n    at Context.<anonymous> (file:///home/pavel/testing/useful/tests/formatDay.test.js:28:39)\n    at process.processImmediate (node:internal/timers:471:21)"
+            }
+        },
+        {
+            "title":"month primitive",
+            "fullTitle":"formatDay() month primitive",
+            "file":"/home/pavel/testing/useful/tests/formatDay.test.js",
+            "duration":0,
+            "currentRetry":0,
+            "speed":"fast",
+            "err":{
+                
+            }
+        },
+        {
+            "title":"month string",
+            "fullTitle":"formatDay() month string",
+            "file":"/home/pavel/testing/useful/tests/formatDay.test.js",
+            "duration":0,
+            "currentRetry":0,
+            "speed":"fast",
+            "err":{
+                
+            }
+        },
+        {
+            "title":"month object",
+            "fullTitle":"formatDay() month object",
+            "file":"/home/pavel/testing/useful/tests/formatDay.test.js",
+            "duration":0,
+            "currentRetry":0,
+            "speed":"fast",
+            "err":{
+                
+            }
+        }
+        ],
+        "pending":[
+        
+        ],
+        "failures":[
+        {
+            "title":"month null",
+            "fullTitle":"formatDay() month null",
+            "file":"/home/pavel/testing/useful/tests/formatDay.test.js",
+            "duration":1,
+            "currentRetry":0,
+            "err":{
+                "message":"expected undefined to equal 2",
+                "showDiff":true,
+                "expected":2,
+                "operator":"strictEqual",
+                "stack":"AssertionError: expected undefined to equal 2\n    at Context.<anonymous> (file:///home/pavel/testing/useful/tests/formatDay.test.js:28:39)\n    at process.processImmediate (node:internal/timers:471:21)"
+            }
+        }
+        ],
+        "passes":[
+        {
+            "title":"return string",
+            "fullTitle":"formatDay() return string",
+            "file":"/home/pavel/testing/useful/tests/formatDay.test.js",
+            "duration":1,
+            "currentRetry":0,
+            "speed":"fast",
+            "err":{
+                
+            }
+        },
+        {
+            "title":"return correct format",
+            "fullTitle":"formatDay() return correct format",
+            "file":"/home/pavel/testing/useful/tests/formatDay.test.js",
+            "duration":0,
+            "currentRetry":0,
+            "speed":"fast",
+            "err":{
+                
+            }
+        },
+        {
+            "title":"month undefined",
+            "fullTitle":"formatDay() month undefined",
+            "file":"/home/pavel/testing/useful/tests/formatDay.test.js",
+            "duration":0,
+            "currentRetry":0,
+            "speed":"fast",
+            "err":{
+                
+            }
+        },
+        {
+            "title":"month primitive",
+            "fullTitle":"formatDay() month primitive",
+            "file":"/home/pavel/testing/useful/tests/formatDay.test.js",
+            "duration":0,
+            "currentRetry":0,
+            "speed":"fast",
+            "err":{
+                
+            }
+        },
+        {
+            "title":"month string",
+            "fullTitle":"formatDay() month string",
+            "file":"/home/pavel/testing/useful/tests/formatDay.test.js",
+            "duration":0,
+            "currentRetry":0,
+            "speed":"fast",
+            "err":{
+                
+            }
+        },
+        {
+            "title":"month object",
+            "fullTitle":"formatDay() month object",
+            "file":"/home/pavel/testing/useful/tests/formatDay.test.js",
+            "duration":0,
+            "currentRetry":0,
+            "speed":"fast",
+            "err":{
+                
+            }
+        }
+    ]
+}

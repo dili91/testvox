@@ -10,7 +10,7 @@ project_version:= `cargo metadata --format-version=1 --no-deps | jq -r '.package
 default_test_reports_patterns := "/tmp/*.xml"
 
 docker-build:
-    docker build . -t adilisio/testvox
+    docker build --platform linux/amd64,linux/arm64,linux/i386 . -t adilisio/testvox
 
 docker-run test_reports_patterns=default_test_reports_patterns:
     docker run --rm -v $(PWD)/test-data:/tmp adilisio/testvox -s -p \

@@ -1,5 +1,6 @@
 /// module that includes models and logic to parse Junit results
 pub mod junit;
+pub mod mocha_json;
 
 use crate::models::test_result::TestResult;
 use anyhow::Result;
