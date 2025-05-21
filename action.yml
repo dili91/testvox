@@ -13,6 +13,10 @@ inputs:
     description: 'Directory that contains raw test results'
     required: true
     default: "./build/test-results/*.xml"
+  report_type:
+    description: 'The type of report to parse (e.g. junit, mocha)'
+    required: false
+    default: "junit"
   include_skipped:
     description: "Whether to include skipped tests in the report"
     default: false

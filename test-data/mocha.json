@@ -1,0 +1,200 @@
+{
+  "stats": {
+    "suites": 3,
+    "tests": 5,
+    "passes": 2,
+    "pending": 1,
+    "failures": 2,
+    "start": "2023-10-28T10:00:00.000Z",
+    "end": "2023-10-28T10:00:02.000Z",
+    "duration": 2000
+  },
+  "results": [
+    {
+      "uuid": "suite-uuid-root",
+      "title": "Main Application",
+      "fullFile": "/tests/main.js",
+      "file": "/tests/main.js",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [
+        {
+          "title": "Initial Test Passed",
+          "fullTitle": "Main Application Initial Test Passed",
+          "timedOut": false,
+          "duration": 150,
+          "state": "passed",
+          "speed": "fast",
+          "pass": true,
+          "fail": false,
+          "pending": false,
+          "context": null,
+          "code": "assert(true);",
+          "err": {},
+          "uuid": "test-uuid-001",
+          "parentUUID": "suite-uuid-root",
+          "skipped": false
+        }
+      ],
+      "suites": [
+        {
+          "uuid": "suite-uuid-1",
+          "title": "User Authentication",
+          "fullFile": "/tests/auth.js",
+          "file": "/tests/auth.js",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "Login successfully",
+              "fullTitle": "Main Application User Authentication Login successfully",
+              "timedOut": false,
+              "duration": 55,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.login('user', 'pass');",
+              "err": {},
+              "uuid": "test-uuid-101",
+              "parentUUID": "suite-uuid-1",
+              "skipped": false
+            },
+            {
+              "title": "Login fails with wrong password",
+              "fullTitle": "Main Application User Authentication Login fails with wrong password",
+              "timedOut": false,
+              "duration": 70,
+              "state": "failed",
+              "speed": "fast",
+              "pass": false,
+              "fail": true,
+              "pending": false,
+              "context": null,
+              "code": "cy.login('user', 'wrong'); expect(error).to.exist;",
+              "err": {
+                "message": "AssertionError: Expected an error to exist, but it did not",
+                "stack": "AssertionError: Expected an error to exist, but it did not\n    at Context.eval (http://localhost:8080/__cypress/tests?p=cypress/integration/auth_spec.js:138:15)"
+              },
+              "uuid": "test-uuid-102",
+              "parentUUID": "suite-uuid-1",
+              "skipped": false
+            }
+          ],
+          "suites": [
+            {
+              "uuid": "suite-uuid-2",
+              "title": "Password Reset",
+              "fullFile": "/tests/auth_password.js",
+              "file": "/tests/auth_password.js",
+              "beforeHooks": [],
+              "afterHooks": [],
+              "tests": [
+                {
+                  "title": "Should send password reset email",
+                  "fullTitle": "Main Application User Authentication Password Reset Should send password reset email",
+                  "timedOut": false,
+                  "duration": 0, 
+                  "state": "pending",
+                  "speed": null,
+                  "pass": false,
+                  "fail": false,
+                  "pending": true,
+                  "context": null,
+                  "code": "// TODO: Implement test",
+                  "err": {},
+                  "uuid": "test-uuid-201",
+                  "parentUUID": "suite-uuid-2",
+                  "skipped": false 
+                }
+              ],
+              "suites": [],
+              "passes": [],
+              "failures": [],
+              "pending": ["test-uuid-201"],
+              "skipped": [],
+              "duration": 0,
+              "root": false,
+              "rootEmpty": false,
+              "_timeout": 2000
+            }
+          ],
+          "passes": ["test-uuid-101"],
+          "failures": ["test-uuid-102"],
+          "pending": [],
+          "skipped": [],
+          "duration": 125,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        },
+        {
+            "uuid": "suite-uuid-3",
+            "title": "Empty Suite",
+            "fullFile": "",
+            "file": "",
+            "beforeHooks": [],
+            "afterHooks": [],
+            "tests": [],
+            "suites": [],
+            "passes": [],
+            "failures": [],
+            "pending": [],
+            "skipped": [],
+            "duration": 0,
+            "root": false,
+            "rootEmpty": true,
+            "_timeout": 2000
+        }
+      ],
+      "passes": ["test-uuid-001"],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 2000,
+      "root": true,
+      "rootEmpty": false,
+      "_timeout": 2000
+    },
+    {
+      "uuid": "suite-uuid-flat",
+      "title": "", 
+      "fullFile": "/tests/another_set.js",
+      "file": "/tests/another_set.js",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [
+         {
+            "title": "Another failed test (no duration)",
+            "fullTitle": "Another failed test (no duration)",
+            "timedOut": false,
+            "duration": null, 
+            "state": "failed",
+            "pass": false,
+            "fail": true,
+            "pending": false,
+            "err": {
+                "message": "Error: Something went wrong in a test without duration"
+            },
+            "uuid": "test-uuid-301",
+            "parentUUID": "suite-uuid-flat",
+            "skipped": false
+        }
+      ],
+      "suites": [],
+      "passes": [],
+      "failures": ["test-uuid-301"],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true, 
+      "rootEmpty": false,
+      "_timeout": 2000
+    }
+  ],
+  "passes": [], 
+  "failures": [],
+  "pending": []
+}

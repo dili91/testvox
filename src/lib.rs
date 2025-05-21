@@ -4,12 +4,12 @@
 use anyhow::Result;
 use models::{
     test_report::{PrettyPrint, ReportBuilder},
-    test_result::TestResult,
+    test_result::TestResult, // TestResult is already here
 };
-use parsers::{junit::JunitTestParser, TestParser};
+// use parsers::{junit::JunitTestParser, TestParser}; // These are no longer directly used here
 use url::Url;
 
-/// basic models of the library
+// basic models of the library
 pub mod models;
 /// generic and custom parsers types
 pub mod parsers;
@@ -22,22 +22,11 @@ pub fn create_test_report<T>(request: CreateTestReportRequest) -> T
 where
     T: From<ReportBuilder> + PrettyPrint,
 {
-    // Automatically detect test parser and flatten all results into a single array of results
-    let test_results: Vec<TestResult> = request
-        .reports_contents
-        .into_iter()
-        .map(|test_file| {
-            detect_parser(test_file)
-                .expect("Unable to detect test parser")
-                .parse()
-        })
-        .filter_map(|test_results| test_results.ok())
-        .flatten()
-        .collect();
-
+    // Parsing logic has moved to main.rs.
+    // create_test_report now directly uses the test_results from the request.
     let mut report_builder = ReportBuilder::new()
         .with_title(request.title)
-        .with_test_results(test_results);
+        .with_test_results(request.test_results); // Use request.test_results directly
 
     if request.include_passed {
         report_builder = report_builder.include_passed();
@@ -54,18 +43,15 @@ where
     report_builder.build::<T>()
 }
 
-fn detect_parser(report_content: String) -> Result<Box<dyn TestParser>> {
-    //TODO: implement real test detector
-    Ok(Box::new(JunitTestParser::from(report_content)))
-}
+// detect_parser function removed as parsing logic is now in main.rs
 
 /// A struct that describe the request for creating a report
 #[derive(Default)]
 pub struct CreateTestReportRequest {
     /// the title that the generated report should have
     pub title: String,
-    /// the contents of the test results to parse
-    pub reports_contents: Vec<String>,
+    /// the parsed test results
+    pub test_results: Vec<TestResult>, // Changed from reports_contents
     /// whether to include passed tests in the generated reports
     pub include_passed: bool,
     /// whether to include skipped tests in the generated reports
@@ -77,21 +63,49 @@ pub struct CreateTestReportRequest {
 #[cfg(test)]
 mod tests {
     use assert_json::assert_json;
-    use std::fs;
+    // use std::fs; // fs is no longer needed for this test directly
     use url::Url;
+    use crate::models::test_status::TestStatus; // Added for constructing TestResult
 
     use crate::{
         create_test_report, models::test_report::PrettyPrint, reporters::slack::SlackReport,
-        CreateTestReportRequest,
+        CreateTestReportRequest, TestResult, // Added TestResult here for direct use
     };
 
     #[test]
-    fn should_create_a_slack_report_from_junit_results() {
+    fn should_create_a_slack_report_from_parsed_test_results() { // Renamed test
+        // Manually create TestResult instances, similar to what junit.xml would produce
+        let test_results_data = vec![
+            TestResult::builder()
+                .with_name("It should update the password".to_string())
+                .with_status(TestStatus::Failed)
+                .with_execution_time(0.982)
+                .with_failure_message("bad credentials".to_string())
+                .build(),
+            TestResult::builder()
+                .with_name("It should login the user".to_string())
+                .with_status(TestStatus::Skipped)
+                .build(),
+            TestResult::builder()
+                .with_name("It should create a new user".to_string())
+                .with_status(TestStatus::Passed)
+                .with_execution_time(2.113871)
+                .build(),
+            TestResult::builder()
+                .with_name("It should fail due to user already existing".to_string())
+                .with_status(TestStatus::Passed)
+                .with_execution_time(1.051)
+                .build(),
+            TestResult::builder()
+                .with_name("It should fail due to bad credentials".to_string())
+                .with_status(TestStatus::Passed)
+                .with_execution_time(0.781)
+                .build(),
+        ];
+
         let req = CreateTestReportRequest {
             title: "My cool test report".to_string(),
-            reports_contents: vec![
-                fs::read_to_string("./test-data/junit.xml").expect("Unable to read file")
-            ],
+            test_results: test_results_data, // Use pre-parsed results
             include_passed: true,
             include_skipped: true,
             link: Some(Url::parse("http://localhost/run/123").expect("unable to parse link")),
